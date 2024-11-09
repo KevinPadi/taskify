@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   
       if (res.status === 200) {
         toast.update(loadingToastId, {
-          render: "Logged successfully!",
+          render: "Logged in successfully!",
           type: "success",
           isLoading: false,
           autoClose: 2500,
