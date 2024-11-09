@@ -29,7 +29,7 @@ import CTAButton from "./CTAButton";
 import useLogin from '@/hooks/useLogin';
 import useRegister from '@/hooks/useRegister';
 import { useAuth } from '@/hooks/useAuth';
-import { RegisterData } from '@/types';
+import { LoginData, RegisterData } from '@/types';
 export function DrawerDialogDemo() {
   const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -73,15 +73,19 @@ export function DrawerDialogDemo() {
 }
 
 function ProfileForm() {
-  const { userLoginSchema, onSubmitLogin } = useLogin()
+  const { userLoginSchema } = useLogin()
   const { userRegisterSchema } = useRegister()
-  const { register } = useAuth()
+  const { login, register } = useAuth()
   
   // TODO: agregar una ruta protegida para probar auth | agregar react toastify para mostrar notifiaciones
  
 
-  const onSubmit = (data: RegisterData) => {
+  const onSubmitRegister = (data: RegisterData) => {
     register(data)
+  }
+
+  const onSubmitLogin = (data: LoginData) => {
+    login(data)
   }
 
   return (
@@ -137,7 +141,7 @@ function ProfileForm() {
       </TabsContent>
       <TabsContent value="register" className="pt-5 text-neutral-900 dark:text-neutral-200">
         <Form {...userRegisterSchema}>
-          <form onSubmit={userRegisterSchema.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={userRegisterSchema.handleSubmit(onSubmitRegister)} className="space-y-6">
             
             {/* Name Field */}
             <FormField

@@ -1,18 +1,19 @@
 // import useLogin from '@/hooks/useLogin'
 import useRegister from '@/hooks/useRegister'
 import { useEffect, createContext, useState, ReactNode } from 'react'
-import { RegisterData } from '@/types'
+import { LoginData, RegisterData } from '@/types'
 import { toast } from 'material-react-toastify'
 import axios from 'axios'
+import useLogin from '@/hooks/useLogin'
 
 interface AuthProviderProps {
   children: ReactNode
 }
 
 interface AuthContextType {
-  user: RegisterData | null
+  user: RegisterData | LoginData | null
   register: (data: RegisterData) => Promise<void>
-  // login: (data: RegisterData) => Promise<void>;
+  login: (data: LoginData) => Promise<void>;
   // logout: () => void;
   isAuthenticated: boolean
 }
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [errors, setErrors] = useState([])
   // const [loading, setLoading] = useState(true)
   const { onSubmitRegister } = useRegister()
+  const { onSubmitLogin } = useLogin()
 
   // clear errors after 5 seconds
   useEffect(() => {
@@ -38,13 +40,50 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const register = async (data: RegisterData) => {
     const loadingToastId = toast.loading("Creating account...");
-    toast('wow q facil')
     try {
       const res = await onSubmitRegister(data);
   
       if (res.status === 201) {
         toast.update(loadingToastId, {
           render: "Account created successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true
+        });
+        setUser(res.data);
+        setIsAuthenticated(true);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage = error.response.data.message || "An error occurred";
+        toast.update(loadingToastId, {
+          render: errorMessage,
+          type: "error",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true,
+        });
+      } else {
+        toast.update(loadingToastId, {
+          render: "An unexpected error occurred",
+          type: "error",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true,
+        });
+      }
+    }
+  };
+  
+  const login = async (data: LoginData) => {
+    const loadingToastId = toast.loading("Login...");
+    try {
+      const res = await onSubmitLogin(data);
+  
+      if (res.status === 200) {
+        toast.update(loadingToastId, {
+          render: "Logged successfully!",
           type: "success",
           isLoading: false,
           autoClose: 2500,
@@ -131,7 +170,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         user,
         register,
-        // signin,
+        login,
         // logout,
         isAuthenticated,
         // errors,
