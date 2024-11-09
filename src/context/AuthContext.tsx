@@ -2,6 +2,8 @@
 import useRegister from '@/hooks/useRegister'
 import { useEffect, createContext, useState, ReactNode } from 'react'
 import { RegisterData } from '@/types'
+import { toast } from 'material-react-toastify'
+import axios from 'axios'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -9,7 +11,7 @@ interface AuthProviderProps {
 
 interface AuthContextType {
   user: RegisterData | null
-  register: (data: RegisterData) => Promise<{ error: unknown; } | undefined>
+  register: (data: RegisterData) => Promise<void>
   // login: (data: RegisterData) => Promise<void>;
   // logout: () => void;
   isAuthenticated: boolean
@@ -35,25 +37,44 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [errors])
 
   const register = async (data: RegisterData) => {
+    const loadingToastId = toast.loading("Creating account...");
+    toast('wow q facil')
     try {
       const res = await onSubmitRegister(data);
+  
       if (res.status === 201) {
-        console.log(res.data);
+        toast.update(loadingToastId, {
+          render: "Account created successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true
+        });
         setUser(res.data);
         setIsAuthenticated(true);
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        return {
-          error: error.message
-        }
-      } else if (error && typeof error === 'object' && 'message' in error) {
-        return {
-          error: error.message
-        }
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage = error.response.data.message || "An error occurred";
+        toast.update(loadingToastId, {
+          render: errorMessage,
+          type: "error",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true,
+        });
+      } else {
+        toast.update(loadingToastId, {
+          render: "An unexpected error occurred",
+          type: "error",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true,
+        });
       }
     }
   };
+  
   
   
   
