@@ -1,6 +1,5 @@
-import * as React from "react"
+import { useState } from 'react';
 import { LogIn, UserRoundPlus, Rocket  } from 'lucide-react';
-import { cn } from "@/lib/utils"
 import { useMediaQuery } from "usehooks-ts"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,17 +18,20 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { Form, FormControl, FormField, FormMessage, FormItem, FormLabel } from './ui/form';
 import CTAButton from "./CTAButton";
-
+import useLogin from '@/hooks/useLogin';
+import useRegister from '@/hooks/useRegister';
+import { useAuth } from '@/hooks/useAuth';
+import { RegisterData } from '@/types';
 export function DrawerDialogDemo() {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
   if (isDesktop) {
@@ -63,14 +65,25 @@ export function DrawerDialogDemo() {
           Let's get started
           <Rocket /> 
         </DrawerTitle>
-        <ProfileForm className="px-4" />
+        <ProfileForm />
         <DrawerDescription className="hidden"></DrawerDescription>
       </DrawerContent>
     </Drawer>
   )
 }
 
-function ProfileForm({ className }: React.ComponentProps<"form">) {
+function ProfileForm() {
+  const { userLoginSchema, onSubmitLogin } = useLogin()
+  const { userRegisterSchema } = useRegister()
+  const { register } = useAuth()
+  
+  // TODO: agregar una ruta protegida para probar auth | agregar react toastify para mostrar notifiaciones
+ 
+
+  const onSubmit = (data: RegisterData) => {
+    register(data)
+  }
+
   return (
      <Tabs defaultValue="login" className="w-full pt-5 px-5 md:p-0">
       <TabsList className="grid w-full grid-cols-2">
@@ -84,38 +97,97 @@ function ProfileForm({ className }: React.ComponentProps<"form">) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="login" className="pt-5 text-neutral-900 dark:text-neutral-200">
-        <form className={cn("grid items-start gap-6", className)}>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input className="text-white" type="email" id="email" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input type="password" id="password" />
-          </div>
-          <Button type="submit">Enter in my account</Button>
-        </form>
+      <Form {...userLoginSchema}>
+          <form onSubmit={userLoginSchema.handleSubmit(onSubmitLogin)} className="space-y-6">
+
+            {/* Email Field */}
+            <FormField
+              control={userLoginSchema.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Password Field */}
+            <FormField
+              control={userLoginSchema.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            {/* Submit Button */}
+            <Button type="submit" className='w-full'>Enter in my account</Button>
+          </form>
+        </Form>
       </TabsContent>
       <TabsContent value="register" className="pt-5 text-neutral-900 dark:text-neutral-200">
-        <form className={cn("grid items-start gap-6", className)}>
-          <div className="grid gap-2">
-            <Label htmlFor="userName">Name</Label>
-            <Input id="userName" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input type="password" id="password" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input type="password" id="confirmPassword" />
-          </div>
-          <Button type="submit">Create new account</Button>
-        </form>
+        <Form {...userRegisterSchema}>
+          <form onSubmit={userRegisterSchema.handleSubmit(onSubmit)} className="space-y-6">
+            
+            {/* Name Field */}
+            <FormField
+              control={userRegisterSchema.control}
+              name="userName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Email Field */}
+            <FormField
+              control={userRegisterSchema.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Password Field */}
+            <FormField
+              control={userRegisterSchema.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            {/* Submit Button */}
+            <Button className='w-full' type="submit">Create new account</Button>
+          </form>
+        </Form>
       </TabsContent>
    </Tabs>
   )
