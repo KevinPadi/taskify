@@ -2,6 +2,7 @@ import { DrawerDialogDemo } from "@/components/AuthForm"
 import { ModeToggle } from "@/components/mode-toggle"
 
 const HomePage = () => {
+
   return (
     <section className="max-h-screen overflow-hidden">
       <header className="bg-neutral-100 dark:bg-neutral-900 w-80 h-auto p-1 rounded-xl mx-auto mt-4 flex items-center justify-between">

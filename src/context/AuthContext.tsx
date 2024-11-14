@@ -5,8 +5,10 @@ import { LoginData, RegisterData } from '@/types'
 import { toast } from 'material-react-toastify'
 import axios from 'axios'
 import useLogin from '@/hooks/useLogin'
+import Cookies from 'js-cookie'
+import { VerifyToken } from '@/lib/VerifyToken'
 
-interface AuthProviderProps {
+interface AuthProviderProps { 
   children: ReactNode
 }
 
@@ -16,6 +18,7 @@ interface AuthContextType {
   login: (data: LoginData) => Promise<void>;
   // logout: () => void;
   isAuthenticated: boolean
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -24,7 +27,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [errors, setErrors] = useState([])
-  // const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
   const { onSubmitRegister } = useRegister()
   const { onSubmitLogin } = useLogin()
 
@@ -51,6 +54,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           autoClose: 2500,
           closeOnClick: true
         });
+        const cookies = Cookies.get()
+        localStorage.setItem("token", cookies.token)
         setUser(res.data);
         setIsAuthenticated(true);
       }
@@ -89,8 +94,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           autoClose: 2500,
           closeOnClick: true
         });
+        const cookies = Cookies.get()
         setUser(res.data);
         setIsAuthenticated(true);
+        localStorage.setItem("token", cookies.token)
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -141,29 +148,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   //     console.error('Error al hacer logout:', error)
   //   }
   // }
-  // useEffect(() => {
-  //   const checkLogin = async () => {
-  //     const cookies = Cookies.get()
-  //     if (!cookies.token) {
-  //       setIsAuthenticated(false)
-  //       setLoading(false)
-  //       return
-  //     }
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = Cookies.get("token")
+      if (!token) {
+        setIsAuthenticated(false)
+        localStorage.removeItem("token")
+        setLoading(false)
+        return
+      }
 
-  //     try {
-  //       const res = await verifyTokenRequest(cookies.token)
-  //       console.log(res)
-  //       if (!res.data) return setIsAuthenticated(false)
-  //       setIsAuthenticated(true)
-  //       setUser(res.data)
-  //       setLoading(false)
-  //     } catch (error) {
-  //       setIsAuthenticated(false)
-  //       setLoading(false)
-  //     }
-  //   }
-  //   checkLogin()
-  // }, [])
+      try {
+        const res = await VerifyToken();
+        if (res.data) {
+          setIsAuthenticated(true);
+          setUser(res.data);
+        } else {
+          setIsAuthenticated(false);
+          localStorage.removeItem("token");
+        }
+      } catch (error) {
+        console.log(error);
+        setIsAuthenticated(false);
+        localStorage.removeItem("token");
+      }
+    }
+    checkLogin()
+  }, [])
 
   return (
     <AuthContext.Provider
@@ -174,7 +185,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // logout,
         isAuthenticated,
         // errors,
-        // loading
+        loading
       }}
     >
       {children}
