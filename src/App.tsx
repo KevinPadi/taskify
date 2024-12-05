@@ -5,6 +5,8 @@ import 'material-react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import Page from "./app/dashboard/page";
+import BoardsPage from "./pages/BoardsPage";
 
 function App() {
   return (
@@ -21,6 +23,15 @@ function App() {
                   <ProtectedRoute>
                     <Dashboard />
                   </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/boards"
+                element={
+                  // <ProtectedRoute>
+                    // <Page />
+                    <BoardsPage />
+                  // </ProtectedRoute>
                 } 
               />
             </Routes>

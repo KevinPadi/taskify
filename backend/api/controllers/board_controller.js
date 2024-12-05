@@ -3,9 +3,10 @@ import Board from '../models/board_model.js'
 // create board
 export const createBoard = async (req, res) => {
   try {
-    const { name } = req.body
+    const { name, background } = req.body
     const newBoard = new Board({
       name,
+      background,
       createdBy: req.user.id
     })
     await newBoard.save()
@@ -29,10 +30,10 @@ export const getBoards = async (req, res) => {
 export const updateBoard = async (req, res) => {
   try {
     const { id } = req.params
-    const { name } = req.body
+    const { name, background } = req.body
     const updatedBoard = await Board.findOneAndUpdate(
       { _id: id, createdBy: req.user.id },
-      { name },
+      { name, background },
       { new: true, runValidators: true }
     )
     if (!updatedBoard) {
@@ -54,7 +55,7 @@ export const deleteBoard = async (req, res) => {
       return res.status(404).json({ message: 'Board not found' })
     }
 
-    return res.sendStatus(204)
+    return res.status(200).json({ message: 'Board deleted successfully' })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
