@@ -2,7 +2,7 @@ import { DrawerDialogDemo } from "@/components/AuthForm"
 import Header from "@/components/Header"
 import { useAuth } from "@/hooks/useAuth"
 import { useEffect } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const HomePage = () => {
   const { user } = useAuth(); // Accede al contexto de autenticación
@@ -17,13 +17,8 @@ const HomePage = () => {
   return (
     <section className="max-h-screen overflow-hidden">
       <Header />
-      <span className="bg-blue-300 absolute top-40 mt-40">
-        <Link to={'/boards'}>
-          to boards
-        </Link>
-      </span>
       <div className="flex flex-col items-center gap-20 mt-20">
-        <div className="flex flex-col gap-12 max-w-xl text-center">
+        <div className="flex flex-col gap-12 max-w-xl text-center items-center">
           <h1 className="text-neutral-900 dark:text-neutral-200 text-3xl md:text-5xl font-medium text-balance">
             Manage your tasks projects easily with Taskify
           </h1>

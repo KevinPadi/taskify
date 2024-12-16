@@ -1,10 +1,11 @@
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuGroup } from "./ui/dropdown-menu"
 import { Button } from "./ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar"
-import { UserRound, LogOut } from "lucide-react"
+import { LogOut } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { createAvatar } from '@dicebear/core'
 import { notionistsNeutral } from '@dicebear/collection'
+import { AccountDialogDrawer } from "./AccountDialogDrawer"
 
 const AvatarDropdown = () => {
   const { user, isAuthenticated, logout } = useAuth()
@@ -45,9 +46,8 @@ const AvatarDropdown = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <UserRound />
-            Account
+          <DropdownMenuItem asChild>
+            <AccountDialogDrawer />
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
