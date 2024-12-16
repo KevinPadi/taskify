@@ -84,7 +84,7 @@ export const verifyToken = async (req, res) => {
 
     return res.status(200).json({
       id: userFound._id,
-      username: userFound.userName,
+      userName: userFound.userName,
       email: userFound.email
     })
   })
