@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Send } from "lucide-react"
 import BoardsDrawerMenu from "@/components/BoardsDrawerMenu"
-import CardsProject from "@/components/ProjectsLink"
 import Header from "@/components/Header"
 import CreateBoardDialogDrawer from "@/components/CreateBoardDialogDrawer"
 import ProjectsCardsCntr from "@/components/ProjectsCardsCntr"
 import { useEffect } from "react"
 import { useBoard } from "@/hooks/useBoardContext"
+import ProjectsLink from "@/components/ProjectsLink"
 
 const BoardsPage = () => {
   const { boards, fetchBoards } = useBoard()
@@ -27,7 +27,7 @@ const BoardsPage = () => {
             {/* <NavMain items={data.navMain} /> */}
             {boards.map((item) => (
               <li key={item._id}>
-                <CardsProject item={item} />
+                <ProjectsLink item={item} />
               </li>
           ))}
           </ul>
