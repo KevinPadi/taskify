@@ -14,7 +14,7 @@ import { createAvatar } from '@dicebear/core'
 import { notionistsNeutral } from '@dicebear/collection'
 
 export function AccountDialogDrawer() {
-  const { user, logout } = useAuth()
+  const { user, logout, deleteAccount } = useAuth()
   
   // const [userData, setUserData] = useState({
   //   userName: user?.userName,
@@ -38,7 +38,9 @@ export function AccountDialogDrawer() {
   //   setEditedData(prev => ({ ...prev, [name]: value }))
   // }
 
-  const handleDeleteAccount = () => console.log('Delete account')
+  const handleDeleteAccount = () => {
+    deleteAccount()
+  }
   const handleLogout = () => {
     logout()
   }

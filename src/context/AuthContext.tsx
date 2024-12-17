@@ -8,6 +8,7 @@ import useLogin from '@/hooks/useLogin'
 import Cookies from 'js-cookie'
 import logoutRequest from '@/hooks/useLogout'
 import { VerifyToken } from '@/lib/VerifyToken'
+import deleteAccountRequest from '@/hooks/useDeleteAccount'
 
 interface User {
   id: string;
@@ -25,6 +26,7 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<void>
   login: (data: LoginData) => Promise<void>;
   logout: () => void;
+  deleteAccount: () => void;
   isAuthenticated: boolean
   loading: boolean
 }
@@ -166,6 +168,39 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
 
+  const deleteAccount = async () => {
+    const loadingToastId = toast.loading("Deleting account...");
+  
+    try {
+      await deleteAccountRequest();
+      Cookies.remove('token');
+  
+      setUser(null);
+      setIsAuthenticated(false);
+  
+      toast.update(loadingToastId, {
+        render: "Account deleted successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 2500,
+        closeOnClick: true,
+      });
+  
+      window.location.href = '/'
+  
+    } catch (error) {
+      console.error('Error during account deletion:', error);
+  
+      toast.update(loadingToastId, {
+        render: "An error occurred while deleting the account.",
+        type: "error",
+        isLoading: false,
+        autoClose: 2500,
+        closeOnClick: true,
+      });
+    }
+  }
+
   useEffect(() => {
     const checkLogin = async () => {
       const token = Cookies.get("token")
@@ -201,7 +236,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         user,
         register,
         login,
-        // logout,
+        deleteAccount,
         isAuthenticated,
         logout,
         // errors,

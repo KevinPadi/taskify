@@ -1,8 +1,11 @@
 import User from '../models/user_model.js'
+import Board from '../models/board_model.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { createAccessToken } from '../utils.js'
 import { config as configDotenv } from "dotenv"
+import List from '../models/list_model.js'
+import Card from '../models/card_model.js'
 
 configDotenv()
 const TOKEN_SECRET = process.env.TOKEN_SECRET
@@ -98,3 +101,72 @@ export const logout = async (req, res) => {
   })
   return res.status(200).json({ message: 'Sesión cerrada exitosamente' })
 }
+
+export const deleteUserAccount = async (req, res) => {
+  const { id } = req.user; // Asumiendo que el ID del usuario está en `req.user` tras autenticación.
+  console.log('req.user.id:', id);
+
+  try {
+    // Verificar si el usuario existe
+    const userFound = await User.findById(id);
+    console.log('userFound:', userFound);
+    if (!userFound) {
+      console.log('User not found');
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Obtener boards asociados al usuario
+    const boards = await Board.find({ createdBy: id });
+    console.log('Boards found:', boards);
+
+    for (const board of boards) {
+      console.log('Processing board:', board._id);
+
+      // Obtener listas asociadas al board
+      const lists = await List.find({ board: board._id });
+      console.log(`Lists for board ${board._id}:`, lists);
+
+      for (const list of lists) {
+        console.log('Processing list:', list._id);
+
+        // Obtener cards asociadas a la lista
+        const cards = await Card.find({ board: board._id, list: list._id });
+        console.log(`Cards for list ${list._id}:`, cards);
+
+        // Eliminar todas las cards asociadas a la lista
+        if (cards.length > 0) {
+          console.log(`Deleting ${cards.length} cards for list ${list._id}`);
+          await Card.deleteMany({ board: board._id, list: list._id });
+        } else {
+          console.log(`No cards found for list ${list._id}`);
+        }
+      }
+
+      // Eliminar todas las listas asociadas al board
+      if (lists.length > 0) {
+        console.log(`Deleting ${lists.length} lists for board ${board._id}`);
+        await List.deleteMany({ board: board._id });
+      } else {
+        console.log(`No lists found for board ${board._id}`);
+      }
+    }
+
+    // Eliminar los boards
+    if (boards.length > 0) {
+      console.log(`Deleting ${boards.length} boards for user ${id}`);
+      await Board.deleteMany({ createdBy: id });
+    } else {
+      console.log(`No boards found for user ${id}`);
+    }
+
+    // Eliminar el usuario
+    console.log('Deleting user:', id);
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json({ message: 'User account and related data deleted successfully' });
+  } catch (error) {
+    console.error('Error during account deletion:', error);
+    res.status(500).json({ message: 'Error deleting user account', error: error.message });
+  }
+};
+

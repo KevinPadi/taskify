@@ -23,6 +23,7 @@ import {
   login,
   verifyToken,
   logout,
+  deleteUserAccount,
 } from '../controllers/user_controller.js';
 import { auth } from '../middlewares/auth_middleware.js';
 import { validateSchema } from '../middlewares/validator_middleware.js';
@@ -36,6 +37,7 @@ const apiRouter = Router();
 // Rutas de autenticación
 apiRouter.post('/register', validateSchema(registerSchema), registerUser);
 apiRouter.post('/login', validateSchema(loginSchema), login);
+apiRouter.delete('/deleteAccount', auth, deleteUserAccount)
 apiRouter.get('/verify', verifyToken);
 apiRouter.post('/logout', logout);
 
