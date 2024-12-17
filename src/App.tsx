@@ -4,8 +4,8 @@ import { ToastContainer } from 'material-react-toastify';
 import 'material-react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from "./components/ProtectedRoute";
-import Dashboard from "./pages/Dashboard";
-import Page from "./app/dashboard/page";
+// import Dashboard from "./pages/Dashboard";
+// import Page from "./app/dashboard/page";
 import BoardsPage from "./pages/BoardsPage";
 
 function App() {
@@ -17,21 +17,21 @@ function App() {
           />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route 
+              {/* <Route 
                 path="/dashboard" 
                 element={
                   <ProtectedRoute>
                     <Dashboard />
                   </ProtectedRoute>
                 } 
-              />
+              /> */}
               <Route 
                 path="/boards"
                 element={
-                  // <ProtectedRoute>
-                    // <Page />
+                  <ProtectedRoute>
+                    {/* <Page /> */}
                     <BoardsPage />
-                  // </ProtectedRoute>
+                  </ProtectedRoute>
                 } 
               />
             </Routes>

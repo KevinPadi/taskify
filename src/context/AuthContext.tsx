@@ -6,17 +6,27 @@ import { toast } from 'material-react-toastify'
 import axios from 'axios'
 import useLogin from '@/hooks/useLogin'
 import Cookies from 'js-cookie'
+import logoutRequest from '@/hooks/useLogout'
 import { VerifyToken } from '@/lib/VerifyToken'
+import deleteAccountRequest from '@/hooks/useDeleteAccount'
+
+interface User {
+  id: string;
+  userName: string;
+  email: string;
+  
+}
 
 interface AuthProviderProps { 
   children: ReactNode
 }
 
 interface AuthContextType {
-  user: RegisterData | LoginData | null
+  user: User | null
   register: (data: RegisterData) => Promise<void>
   login: (data: LoginData) => Promise<void>;
-  // logout: () => void;
+  logout: () => void;
+  deleteAccount: () => void;
   isAuthenticated: boolean
   loading: boolean
 }
@@ -24,14 +34,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [errors, setErrors] = useState([])
   const [loading, setLoading] = useState(true)
   const { onSubmitRegister } = useRegister()
   const { onSubmitLogin } = useLogin()
-
-  // clear errors after 5 seconds
+  
+  // limpiar errores después de 5 segundos
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -40,6 +50,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return () => clearTimeout(timer)
     }
   }, [errors])
+
 
   const register = async (data: RegisterData) => {
     const loadingToastId = toast.loading("Creating account...");
@@ -56,7 +67,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         });
         const cookies = Cookies.get()
         localStorage.setItem("token", cookies.token)
-        setUser(res.data);
+        setUser(res.data)
+        localStorage.setItem('user', JSON.stringify(res.data))
         setIsAuthenticated(true);
       }
     } catch (error: unknown) {
@@ -85,7 +97,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const loadingToastId = toast.loading("Login...");
     try {
       const res = await onSubmitLogin(data);
-  
+
       if (res.status === 200) {
         toast.update(loadingToastId, {
           render: "Logged in successfully!",
@@ -95,7 +107,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           closeOnClick: true
         });
         const cookies = Cookies.get()
-        setUser(res.data);
+        setUser(res.data)
+        localStorage.setItem('user', JSON.stringify(res.data))
+        console.log(JSON.stringify(res.data))
         setIsAuthenticated(true);
         localStorage.setItem("token", cookies.token)
       }
@@ -120,34 +134,73 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     }
   };
-  
-  
-  
-  
-  
 
-  // const signin = async (user) => {
-  //   try {
-  //     const res = await loginRequest(user)
-  //     setUser(res.data)
-  //     setIsAuthenticated(true)
-  //   } catch (error) {
-  //     console.log(error)
-  //     // setErrors(error.response.data.message);
-  //   }
-  // }
+  const logout = async () => {
+    const loadingToastId = toast.loading("Logging out...");
 
-  // const logout = async () => {
-  //   try {
-  //     await logoutRequest()
-  //     Cookies.remove('token')
-  //     setUser(null)
-  //     setIsAuthenticated(false)
-  //     // Aquí puedes añadir lógica adicional, como redirigir al usuario a la página de inicio de sesión
-  //   } catch (error) {
-  //     console.error('Error al hacer logout:', error)
-  //   }
-  // }
+    try {
+      await logoutRequest();
+      Cookies.remove('token');
+
+      setUser(null);
+      setIsAuthenticated(false);
+
+      toast.update(loadingToastId, {
+        render: "Logged out successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 2500,
+        closeOnClick: true,
+      });
+
+      window.location.href = '/' // O puedes usar react-router para redirigir
+
+    } catch (error) {
+      console.error('Error during logout:', error);
+
+      toast.update(loadingToastId, {
+        render: "An error occurred during logout.",
+        type: "error",
+        isLoading: false,
+        autoClose: 2500,
+        closeOnClick: true,
+      });
+    }
+  }
+
+  const deleteAccount = async () => {
+    const loadingToastId = toast.loading("Deleting account...");
+  
+    try {
+      await deleteAccountRequest();
+      Cookies.remove('token');
+  
+      setUser(null);
+      setIsAuthenticated(false);
+  
+      toast.update(loadingToastId, {
+        render: "Account deleted successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 2500,
+        closeOnClick: true,
+      });
+  
+      window.location.href = '/'
+  
+    } catch (error) {
+      console.error('Error during account deletion:', error);
+  
+      toast.update(loadingToastId, {
+        render: "An error occurred while deleting the account.",
+        type: "error",
+        isLoading: false,
+        autoClose: 2500,
+        closeOnClick: true,
+      });
+    }
+  }
+
   useEffect(() => {
     const checkLogin = async () => {
       const token = Cookies.get("token")
@@ -159,16 +212,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
 
       try {
-        const res = await VerifyToken();
+        const res = await VerifyToken()
         if (res.data) {
           setIsAuthenticated(true);
-          setUser(res.data);
+          setUser(res.data)
+          console.log(res.data  )
         } else {
           setIsAuthenticated(false);
           localStorage.removeItem("token");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error)
         setIsAuthenticated(false);
         localStorage.removeItem("token");
       }
@@ -182,8 +236,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         user,
         register,
         login,
-        // logout,
+        deleteAccount,
         isAuthenticated,
+        logout,
         // errors,
         loading
       }}

@@ -6,7 +6,7 @@ import type { ButtonProps } from "./ui/button";
 const CTAButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => (
   <Button 
     ref={ref}
-    className="w-fit mx-auto shadow-lg shadow-black/70 dark:shadow-black dark:bg-neutral-200 dark:hover:bg-white transition-all ease-in-out border-2 border-neutral-400 dark:border-neutral-900/80"
+    className="w-fit shadow-lg shadow-black/70 dark:shadow-black dark:bg-neutral-200 dark:hover:bg-white transition-all ease-in-out border-2 border-neutral-400 dark:border-neutral-900/80"
     {...props}
   >
     Get Started
