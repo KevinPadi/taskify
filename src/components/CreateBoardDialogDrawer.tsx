@@ -78,7 +78,6 @@ const CreateBoardDialogDrawer = ({ variant = "normal", state }: CreateBoardDialo
   const { boards } = useBoard();
 
   const isDisabled = boards.length === 5;
-  console.log(isDisabled) 
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setOpen}>

@@ -16,7 +16,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   useEffect(() => {
     fetchBoards()
-    console.log(boards)
   } ,[])
 
   return (

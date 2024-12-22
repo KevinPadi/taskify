@@ -12,7 +12,6 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return <p>Loading...</p>
   }
 
-  console.log(isAuthenticated)
   return isAuthenticated ? children : <Navigate to="/" />
 }
 
