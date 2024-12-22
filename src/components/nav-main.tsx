@@ -1,6 +1,8 @@
 import {
   ChevronRight,
-  LayoutGrid,
+  Activity,
+  Kanban,
+  Send
 } from "lucide-react";
 
 import {
@@ -18,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Board } from "@/context/BoardContext";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 type NavMainProps = {
   items: Board[];
@@ -28,11 +31,11 @@ export function NavMain({ items }: NavMainProps) {
   return (
     <SidebarGroup>
       <SidebarMenu>
-        <Collapsible className="mt-4" key="boards" asChild>
+        <Collapsible key="boards" asChild>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Boards">
               <Link to={"/boards"} className="flex items-center">
-                <LayoutGrid />
+                <Kanban />
                 <span className="leading-none">Boards</span>
               </Link>
             </SidebarMenuButton>
@@ -45,12 +48,12 @@ export function NavMain({ items }: NavMainProps) {
                   </SidebarMenuAction>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <SidebarMenuSub className="w-full pe-4">
+                  <SidebarMenuSub className="">
                     {items?.map((subItem) => (
                       <SidebarMenuItem key={subItem.name}>
                         <SidebarMenuButton asChild>
                           <Link to={`/kanban/${subItem.name}`}>
-                            <span>{subItem.name}</span>
+                            <span className="dark:text-neutral-300">{subItem.name}</span>
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -61,6 +64,22 @@ export function NavMain({ items }: NavMainProps) {
             ) : null}
           </SidebarMenuItem>
         </Collapsible>
+        <SidebarMenuButton asChild tooltip="Activity">
+          {/* <Link to={"/boards"} className="flex items-center"> */}
+          <Button variant={'ghost'} disabled className="w-full flex justify-start font-normal">
+            <Activity />
+            <span className="leading-none">Activity</span>
+          </Button>
+          {/* </Link> */}
+        </SidebarMenuButton>
+        <SidebarMenuButton asChild tooltip="Feedback">
+          <Button variant={'ghost'}>
+            <a href="https://github.com/KevinPadi/taskify/issues/new?title=Feedback&body=Describe%20your%20feedback%20here." target="_blank" rel="noopener noreferrer" className="flex justify-start font-normal w-full gap-2">
+              <Send />
+              <span className="leading-none">Feedback</span>
+            </a>
+          </Button>
+        </SidebarMenuButton>
       </SidebarMenu>
     </SidebarGroup>
   );
