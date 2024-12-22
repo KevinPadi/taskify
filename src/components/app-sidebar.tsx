@@ -1,4 +1,3 @@
-import * as React from "react"
 import {
   Frame,
   GalleryVerticalEnd,
@@ -10,7 +9,7 @@ import {
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { SidebarLogoHeader } from "@/components/SidebarHeader"
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +17,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useBoard } from "@/hooks/useBoardContext"
+import { useEffect } from "react"
 
 // This is sample data.
 const data = {
@@ -75,13 +76,20 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { boards, fetchBoards } = useBoard()
+
+  useEffect(() => {
+    fetchBoards()
+    console.log(boards)
+  } ,[])
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarLogoHeader />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={boards} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>

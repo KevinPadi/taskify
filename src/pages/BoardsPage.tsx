@@ -10,9 +10,10 @@ import ProjectsLink from "@/components/ProjectsLink"
 
 const BoardsPage = () => {
   const { boards, fetchBoards } = useBoard()
-
+  console.log(boards)
   useEffect(() => {
     fetchBoards()
+    console.log(boards)
   }, [])
 
   return (

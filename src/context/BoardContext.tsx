@@ -3,7 +3,7 @@ import axios from "axios"
 import { toast } from "material-react-toastify"
 import useManageBoard from "@/hooks/useManageBoard"
 
-interface Board {
+export interface Board {
   _id: string
   name: string
   background: string

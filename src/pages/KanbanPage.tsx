@@ -13,8 +13,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { Link, useParams } from "react-router-dom"
 
 export default function KanbanPage() {
+  const { board } = useParams()
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -26,14 +29,16 @@ export default function KanbanPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Boards
+                  <BreadcrumbLink asChild>
+                    <Link to='/boards'>
+                      Boards
+                    </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                {/* <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem> */}
+                  <BreadcrumbPage>{board}</BreadcrumbPage>
+                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
