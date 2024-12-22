@@ -2,7 +2,7 @@ import {
   ChevronRight,
   Activity,
   Kanban,
-  Send
+  Send,
 } from "lucide-react";
 
 import {
@@ -21,6 +21,7 @@ import {
 import { Board } from "@/context/BoardContext";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { ModeToggle } from "./mode-toggle";
 
 type NavMainProps = {
   items: Board[];
@@ -80,6 +81,7 @@ export function NavMain({ items }: NavMainProps) {
             </a>
           </Button>
         </SidebarMenuButton>
+        <ModeToggle variant="sidebar" />
       </SidebarMenu>
     </SidebarGroup>
   );
