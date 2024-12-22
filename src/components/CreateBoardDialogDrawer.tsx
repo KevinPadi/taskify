@@ -29,7 +29,7 @@ import CreateBoardForm from "./CreateBoardForm";
 interface CreateBoardDialogDrawerProps {
   variant?: "normal" | "sidebar";
   open?: boolean;
-  state: "expanded" | "collapsed"
+  state?: "expanded" | "collapsed"
 }
 
 interface TriggerButtonProps {
