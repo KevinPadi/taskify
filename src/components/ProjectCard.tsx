@@ -10,7 +10,10 @@ type ProjectCardProps = {
 const ProjectCard = ({ name, imageUrl, _id }: ProjectCardProps) => {
 
   return (
-    <Link to={`/kanban/${name}`}>
+    <Link 
+      to={`/kanban/${name}`}
+      state={{ imageUrl }}
+    >
       <article
         className={`relative aspect-video rounded-xl border border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-200 hover:cursor-pointer transition-all ease-in-out overflow-hidden`}
         style={
