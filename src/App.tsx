@@ -25,7 +25,7 @@ function App() {
                 } 
               />
                 <Route 
-                  path="/kanban/:board" 
+                  path="/kanban/:board/:boardId" 
                   element={
                     <ProtectedRoute>
                       <KanbanPage />

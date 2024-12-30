@@ -14,15 +14,48 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import axios from "axios"
+import { useEffect, useState } from "react"
 import { Link, useLocation, useParams } from "react-router-dom"
 
 export default function KanbanPage() {
-  const { board } = useParams()
+  const { board, boardId } = useParams()
   const location = useLocation();
   const { imageUrl } = location.state || {}
+  const apiUrl = import.meta.env.VITE_BACKEND_URL
+  const [ columnsData, setColumnsData ] = useState(null)
+  const [ cardsData, setCardsData ] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const BoardBackground = imageUrl === 'none' ? '' : `bg-[url('${imageUrl}')]`
-  console.log(BoardBackground, location.state)
+  useEffect(() => {
+    const fetchColumns = async () => {
+      try {
+        const { data } = await axios.get(`${apiUrl}/api/list/${boardId}`, { withCredentials: true });
+        console.log(data)
+        setColumnsData(data)
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchCards = async () => {
+      try {
+        const { data } = await axios.get(`${apiUrl}/api/card/${boardId}`, { withCredentials: true });
+        console.log(data)
+        setCardsData(data)
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchColumns()
+    fetchCards()
+  }, [apiUrl, boardId])
+  
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -55,7 +88,11 @@ export default function KanbanPage() {
         >
           {/* Degradado negro */}
           <div className="absolute inset-0 bg-neutral-900/20 pointer-events-none"></div>
-          <KanbanBoard />
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <KanbanBoard boardColumns={columnsData} boardCards={cardsData} />
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

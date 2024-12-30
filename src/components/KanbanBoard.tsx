@@ -5,39 +5,82 @@ import { getReorderDestinationIndex } from "@atlaskit/pragmatic-drag-and-drop-hi
 import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder"
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
 
-const BOARD_COLUMNS = {
-  todo: {
-    columnId: "todo",
-    title: "To do",
-    cards: [
-      { id: 1, content: "Task 1" },
-      { id: 2, content: "Task 2" },
-      { id: 5, content: "Task 5" },
-      { id: 6, content: "Task 6" },
-    ],
-  },
-  "in-progress": {
-    columnId: "in-progress",
-    title: "In progress",
-    cards: [
-      { id: 3, content: "Task 3" },
-      { id: 7, content: "Task 7" },
-      { id: 8, content: "Task 8" },
-    ],
-  },
-  done: {
-    columnId: "done",
-    title: "Done",
-    cards: [
-      { id: 4, content: "Task 4" },
-      { id: 9, content: "Task 9" },
-      { id: 10, content: "Task 10" },
-    ],
-  },
+// const BOARD_COLUMNS = {
+//   backlog: {
+//     columnId: "backlog",
+//     title: "Backlog",
+//     cards: [],
+//   },
+//   todo: {
+//     columnId: "todo",
+//     title: "To do",
+//     cards: [
+//       { id: 1, content: "Task 1" },
+//       { id: 2, content: "Task 2" },
+//       { id: 5, content: "Task 5" },
+//       { id: 6, content: "Task 6" },
+//     ],
+//   },
+//   "in-progress": {
+//     columnId: "in-progress",
+//     title: "In progress",
+//     cards: [
+//       { id: 3, content: "Task 3" },
+//       { id: 7, content: "Task 7" },
+//       { id: 8, content: "Task 8" },
+//     ],
+//   },
+//   done: {
+//     columnId: "done",
+//     title: "Done",
+//     cards: [
+//       { id: 4, content: "Task 4" },
+//       { id: 9, content: "Task 9" },
+//       { id: 10, content: "Task 10" },
+//     ],
+//   },
+// }
+
+type Column = {
+  _id: string;
+  name: string;
+  board: string;
+  order: number;
 }
 
-const KanbanBoard = () => {
-  const [columnsData, setColumnsData] = useState(BOARD_COLUMNS)
+type Card = {
+  _id: string;
+  title: string;
+  description: string;
+  priority: string;
+  list: string
+}
+
+type KanbanBoardPropsType = {
+  boardColumns: Column[];
+  boardCards: Card[]
+};
+
+const KanbanBoard: React.FC<KanbanBoardPropsType> = ({ boardColumns, boardCards }) => {
+  const [columnsData, setColumnsData] = useState([]); // Estado inicial vacío
+
+  useEffect(() => {
+    const BOARD_COLUMNS = boardColumns?.reduce((acc, column) => {
+      acc[column.name.toLowerCase().replace(/\s+/g, '-')] = {
+        columnId: column.name.toLowerCase().replace(/\s+/g, '-'),
+        title: column.name,
+        cards: boardCards?.filter(card => card.list === column._id).map(card => ({
+          id: card._id,
+          content: card.title
+        }))
+      };
+      return acc;
+    }, {})
+  
+    setColumnsData(BOARD_COLUMNS)
+  }, [boardColumns, boardCards])
+  
+  console.log(columnsData)
 
   // reorder cards in columns
   const reorderCard = useCallback(
@@ -256,6 +299,10 @@ const KanbanBoard = () => {
     });
   }, [handleDrop]);
 
+  useEffect(() => {
+    console.log("Columns data updated:", columnsData);
+  }, [columnsData]);
+  
   return (
     <div className="board flex justify-around gap-5 size-full overflow-auto z-10">
       {Object.keys(columnsData).map((columnId) => (

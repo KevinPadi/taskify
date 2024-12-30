@@ -15,6 +15,7 @@ interface KanbanColumnTypes {
 const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
   const columnRef = useRef(null); // Create a ref for the column
   const [isDraggedOver, setIsDraggedOver] = useState(false);
+  console.log(columnId, title, cards)
 
   useEffect(() => {
     const columnEl = columnRef.current;
@@ -38,7 +39,7 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
       ref={columnRef} // attach a columnRef to the column div
     >
       <h2 className="text-black dark:text-white font-medium text-2xl pb-2">{title}</h2>
-      {cards.map((card) => (
+      {cards && cards.map((card) => (
         <KanbanCard key={card.id} {...card}>
           {card.content}
         </KanbanCard>

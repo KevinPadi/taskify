@@ -11,7 +11,7 @@ const ProjectCard = ({ name, imageUrl, _id }: ProjectCardProps) => {
 
   return (
     <Link 
-      to={`/kanban/${name}`}
+      to={`/kanban/${name}/${_id}`}
       state={{ imageUrl }}
     >
       <article
