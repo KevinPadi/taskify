@@ -52,7 +52,7 @@ type Card = {
   _id: string;
   title: string;
   description: string;
-  priority: string;
+  priority: 'low' | 'medium' | 'high';
   list: string
 }
 
@@ -65,14 +65,15 @@ const KanbanBoard: React.FC<KanbanBoardPropsType> = ({ boardColumns, boardCards 
   const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; cards: { id: string; content: string }[] }>>({})
 
   useEffect(() => {
-    const BOARD_COLUMNS = boardColumns?.reduce<Record<string, { columnId: string; title: string; cards: { id: string; content: string }[] }>>((acc, column) => {
+    const BOARD_COLUMNS = boardColumns?.reduce<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>((acc, column) => {
       const columnId = column.name.toLowerCase().replace(/\s+/g, '-');
       acc[columnId] = {
         columnId,
         title: column.name,
         cards: boardCards?.filter(card => card.list === column._id).map(card => ({
           id: card._id,
-          content: card.title
+          content: card.title,
+          priority: card.priority
         }))
       };
       return acc;

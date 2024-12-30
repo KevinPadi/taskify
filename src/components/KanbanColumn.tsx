@@ -1,21 +1,23 @@
 import KanbanCard from "./KanbanCard";
-import { useEffect, useRef, useState } from "react"; // NEW
-import invariant from "tiny-invariant"; // NEW
-import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"; // NEW
+import { useEffect, useRef, useState } from "react";
+import invariant from "tiny-invariant";
+import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react";
 
 interface KanbanColumnTypes {
   columnId: string,
   title: string,
   cards: Array<{
     id: string,
-    content: string
+    content: string,
+    priority: 'low' | 'medium' | 'high'
   }>
 }
 
 const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
   const columnRef = useRef(null); // Create a ref for the column
   const [isDraggedOver, setIsDraggedOver] = useState(false);
-  console.log(columnId, title, cards)
 
   useEffect(() => {
     const columnEl = columnRef.current;
@@ -32,13 +34,18 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
       getIsSticky: () => true,
     });
   }, [columnId])
-
+  console.log(cards)
   return (
     <div
       className={`column w-60  rounded-t-md p-2 space-y-2 transition-all ease-in-out duration-300 ${isDraggedOver ? "bg-neutral-300/50 dark:bg-neutral-800/50" : ""}`}
       ref={columnRef} // attach a columnRef to the column div
     >
-      <h2 className="text-black dark:text-white font-medium text-2xl pb-2">{title}</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-black dark:text-white font-medium text-2xl pb-2">{title}</h2>
+        <Button variant="ghost" size='icon' className="p-0 size-7">
+          <Plus />
+        </Button>
+      </div>
       {cards && cards.map((card) => (
         <KanbanCard key={card.id} {...card}>
           {card.content}

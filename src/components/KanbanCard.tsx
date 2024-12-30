@@ -4,21 +4,23 @@ import { draggable, dropTargetForElements} from "@atlaskit/pragmatic-drag-and-dr
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { attachClosestEdge, extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import KanbanDropIndicator from "./KanbanDropIndicator";
+import { Badge } from "./ui/badge";
 
 interface KanbanCardPropsType {
   children: React.ReactNode,
-  id: string
+  id: string,
+  priority: 'low' | 'medium' | 'high'
 }
 
-const KanbanCard = ({ children, ...card }: KanbanCardPropsType) => {
-
+const KanbanCard = ({ children, priority, ...card }: KanbanCardPropsType) => {
+  console.log(card)
   const [isDragging, setIsDragging] = useState(false); // create a state for dragging
   const [closestEdge, setClosestEdge] = useState(null) // State to track the closest edge during drag over
 
   const cardRef = useRef(null); // Create a ref for the card
 
   useEffect(() => {
-    const cardEl = cardRef.current;
+    const cardEl = cardRef.current; 
     invariant(cardEl); // Ensure the card element exists
 
     return combine(
@@ -73,8 +75,11 @@ const KanbanCard = ({ children, ...card }: KanbanCardPropsType) => {
 
   return (
     // attach a cardRef to the card div
-    <div className={`relative bg-neutral-100 dark:bg-neutral-950 hover:bg-neutral-200 dark:hover:bg-neutral-900 border border-white dark:border-neutral-700 text-black dark:text-white rounded-lg hover:cursor-grab p-2 transition-all ease-in-out duration-300 font-medium ${isDragging ? "opacity-40" : ""}`} ref={cardRef}>
+    <div className={`relative flex flex-col gap-4 bg-neutral-100 dark:bg-neutral-950 hover:bg-neutral-200 dark:hover:bg-neutral-900 border border-white dark:border-neutral-700 text-black dark:text-white rounded-xl hover:cursor-grab p-2 transition-all ease-in-out duration-300 font-medium ${isDragging ? "opacity-40" : ""}`} ref={cardRef}>
       {children}
+      <Badge variant={priority} className="w-fit">
+        {priority}
+      </Badge>
       {/* render the DropIndicator if there's a closest edge */}
       {closestEdge && <KanbanDropIndicator edge={closestEdge} gap="8px" />}
     </div>
