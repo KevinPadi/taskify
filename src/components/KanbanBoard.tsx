@@ -62,12 +62,13 @@ type KanbanBoardPropsType = {
 };
 
 const KanbanBoard: React.FC<KanbanBoardPropsType> = ({ boardColumns, boardCards }) => {
-  const [columnsData, setColumnsData] = useState([]); // Estado inicial vacío
+  const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; cards: { id: string; content: string }[] }>>({})
 
   useEffect(() => {
-    const BOARD_COLUMNS = boardColumns?.reduce((acc, column) => {
-      acc[column.name.toLowerCase().replace(/\s+/g, '-')] = {
-        columnId: column.name.toLowerCase().replace(/\s+/g, '-'),
+    const BOARD_COLUMNS = boardColumns?.reduce<Record<string, { columnId: string; title: string; cards: { id: string; content: string }[] }>>((acc, column) => {
+      const columnId = column.name.toLowerCase().replace(/\s+/g, '-');
+      acc[columnId] = {
+        columnId,
         title: column.name,
         cards: boardCards?.filter(card => card.list === column._id).map(card => ({
           id: card._id,
@@ -76,15 +77,13 @@ const KanbanBoard: React.FC<KanbanBoardPropsType> = ({ boardColumns, boardCards 
       };
       return acc;
     }, {})
-  
     setColumnsData(BOARD_COLUMNS)
-  }, [boardColumns, boardCards])
+  }, [boardColumns, boardCards]);
   
-  console.log(columnsData)
-
   // reorder cards in columns
   const reorderCard = useCallback(
     ({ columnId, startIndex, finishIndex }) => {
+      console.log(columnId, startIndex, finishIndex)
       // Get the source column data
       const sourceColumnData = columnsData[columnId];
 
