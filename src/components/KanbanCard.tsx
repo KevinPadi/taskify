@@ -13,7 +13,6 @@ interface KanbanCardPropsType {
 }
 
 const KanbanCard = ({ children, priority, ...card }: KanbanCardPropsType) => {
-  console.log(card)
   const [isDragging, setIsDragging] = useState(false); // create a state for dragging
   const [closestEdge, setClosestEdge] = useState(null) // State to track the closest edge during drag over
 

@@ -4,6 +4,8 @@ import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/ad
 import { getReorderDestinationIndex } from "@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index"
 import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder"
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
+import { Card, Column } from "@/context/KanbanContext";
+import { useKanban } from "@/hooks/useKanbanContext";
 
 // const BOARD_COLUMNS = {
 //   backlog: {
@@ -41,36 +43,17 @@ import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/clo
 //   },
 // }
 
-type Column = {
-  _id: string;
-  name: string;
-  board: string;
-  order: number;
-}
-
-type Card = {
-  _id: string;
-  title: string;
-  description: string;
-  priority: 'low' | 'medium' | 'high';
-  list: string
-}
-
-type KanbanBoardPropsType = {
-  boardColumns: Column[];
-  boardCards: Card[]
-};
-
-const KanbanBoard: React.FC<KanbanBoardPropsType> = ({ boardColumns, boardCards }) => {
+const KanbanBoard: React.FC = () => {
+  const { cardsData, columnData } = useKanban()
   const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; cards: { id: string; content: string }[] }>>({})
 
   useEffect(() => {
-    const BOARD_COLUMNS = boardColumns?.reduce<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>((acc, column) => {
-      const columnId = column.name.toLowerCase().replace(/\s+/g, '-');
+    const BOARD_COLUMNS = columnData?.reduce<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>((acc, column) => {
+      const columnId = column._id
       acc[columnId] = {
         columnId,
         title: column.name,
-        cards: boardCards?.filter(card => card.list === column._id).map(card => ({
+        cards: cardsData?.filter(card => card.list === column._id).map(card => ({
           id: card._id,
           content: card.title,
           priority: card.priority
@@ -79,12 +62,12 @@ const KanbanBoard: React.FC<KanbanBoardPropsType> = ({ boardColumns, boardCards 
       return acc;
     }, {})
     setColumnsData(BOARD_COLUMNS)
-  }, [boardColumns, boardCards]);
+    console.log('board columns:', BOARD_COLUMNS)
+  }, [columnData, cardsData])
   
   // reorder cards in columns
   const reorderCard = useCallback(
     ({ columnId, startIndex, finishIndex }) => {
-      console.log(columnId, startIndex, finishIndex)
       // Get the source column data
       const sourceColumnData = columnsData[columnId];
 
@@ -189,11 +172,11 @@ const KanbanBoard: React.FC<KanbanBoardPropsType> = ({ boardColumns, boardCards 
       );
   
       if (location.current.dropTargets.length === 1) {
-        console.log(
-          "dropTargets1",
-          location.current.dropTargets,
-          location.current.dropTargets.length
-        );
+        // console.log(
+        //   "dropTargets1",
+        //   location.current.dropTargets,
+        //   location.current.dropTargets.length
+        // );
       }
   
       // Check if the current location has exactly two drop targets

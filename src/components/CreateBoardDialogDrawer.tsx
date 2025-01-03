@@ -42,7 +42,7 @@ const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
   if (variant === "sidebar") {
     return (
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger>
           <Button
             variant="ghost"
             size="icon"
@@ -81,7 +81,7 @@ const CreateBoardDialogDrawer = ({ variant = "normal", state }: CreateBoardDialo
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
+        <DialogTrigger asChild={ variant === "sidebar" ? true : false}>
           {variant === "sidebar" && state === "expanded" ? (
             <Button variant="default" size="sm" className={`w-full ${
               isDisabled ? "opacity-60 cursor-not-allowed" : ""
@@ -108,7 +108,7 @@ const CreateBoardDialogDrawer = ({ variant = "normal", state }: CreateBoardDialo
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
+      <DrawerTrigger asChild={ variant === "sidebar" ? true : false}>
         {variant === "sidebar" && (state === "expanded" || !isDesktop) ? (
           <Button variant="default" size="sm" className={`w-full ${
             isDisabled ? "opacity-60 cursor-not-allowed" : ""
