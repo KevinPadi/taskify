@@ -56,7 +56,6 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
         closeOnClick: true,
       });
   
-      console.log(data, `${apiUrl}/api/card/${columnId}/${boardId}`);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage = error.response.data.message || "An error occurred";
@@ -77,15 +76,12 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
         });
       }
       console.error(error);
-    } finally {
-      console.log("finally", `${apiUrl}/api/card/${columnId}/${boardId}`);
     }
   }
 
   const fetchCards = async ( boardId: string): Promise<void> => {
     try {
           const { data } = await onSubmitGetCards(boardId)
-          console.log(data)
           setCardsData(data)
         } catch (error: unknown) {
           if (axios.isAxiosError(error) && error.response) {
@@ -106,8 +102,6 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
               closeOnClick: true,
             })
           }
-        } finally {
-          console.log('finally')
         }
   }
 
@@ -119,82 +113,6 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
       console.error(error);
     }
   }
-
-  // edit board
-  // const editBoard = async ({ values }: ValuesProps): Promise<void> => {
-  //   const loadingToastId = toast.loading("Editing board...");
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const { data } = await onSubmitEditBoard(values);
-      
-  //     setBoards((prev) => 
-  //       prev.map(board => board._id === data._id ? data : board)
-  //     );
-
-  //     toast.update(loadingToastId, {
-  //       render: "Board edited successfully!",
-  //       type: "success",
-  //       isLoading: false,
-  //       autoClose: 2500,
-  //       closeOnClick: true,
-  //     });
-  //   } catch (error: unknown) {
-  //     if (axios.isAxiosError(error) && error.response) {
-  //       const errorMessage = error.response.data.message || "An error occurred";
-  //       toast.update(loadingToastId, {
-  //         render: errorMessage,
-  //         type: "error",
-  //         isLoading: false,
-  //         autoClose: 2500,
-  //         closeOnClick: true,
-  //       });
-  //     } else {
-  //       toast.update(loadingToastId, {
-  //         render: "An unexpected error occurred",
-  //         type: "error",
-  //         isLoading: false,
-  //         autoClose: 2500,
-  //         closeOnClick: true,
-  //       });
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  // delete board
-  // const deleteBoard = async (id: string): Promise<void> => {
-  //   try {
-  //     setLoading(true)
-  //     const { data } = await axios.delete<Board[]>(`http://localhost:3000/api/board/${id}`, {
-  //       withCredentials: true
-  //     })
-  //     console.log(data)
-  //     setBoards((prevBoards) => prevBoards.filter((board) => board._id !== id))
-  //   } catch (error: unknown) {
-  //     if (axios.isAxiosError(error) && error.response) {
-  //       const errorMessage = error.response.data.message || "An error occurred"
-  //       toast.update('loadingToastId', {
-  //         render: errorMessage,
-  //         type: "error",
-  //         isLoading: false,
-  //         autoClose: 2500,
-  //         closeOnClick: true,
-  //       })
-  //     } else {
-  //       toast.update('loadingToastId', {
-  //         render: "An unexpected error occurred",
-  //         type: "error",
-  //         isLoading: false,
-  //         autoClose: 2500,
-  //         closeOnClick: true,
-  //       })
-  //     }
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
 
   return (
     <KanbanContext.Provider value={{ cardsData, columnData, createCard, fetchCards, fetchColumns }}>

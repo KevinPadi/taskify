@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import AddCardDialogDrawer from "./AddCardDialogDrawer";
-import { Column } from "@/context/KanbanContext";
-
 
 interface KanbanColumnTypes {
   columnId: string,

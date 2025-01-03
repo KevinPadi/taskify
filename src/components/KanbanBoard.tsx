@@ -45,7 +45,7 @@ import { useKanban } from "@/hooks/useKanbanContext";
 
 const KanbanBoard: React.FC = () => {
   const { cardsData, columnData } = useKanban()
-  const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; cards: { id: string; content: string }[] }>>({})
+  const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>({})
 
   useEffect(() => {
     const BOARD_COLUMNS = columnData?.reduce<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>((acc, column) => {
