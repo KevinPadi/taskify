@@ -35,13 +35,21 @@ const useManageCards = (initialValues?: { title: string; description?: string; p
     return axios.patch(`${apiUrl}/api/card/${column}/${board}/${id}`, updates, {
       withCredentials: true,
     });
-  };
+  }
+
+  const onSubmitDeleteCard = async (cardToDelete: AddCardFormValues) => {
+    const { id, board, column } = cardToDelete
+    return axios.delete(`${apiUrl}/api/card/${column}/${board}/${id}`, {
+      withCredentials: true
+    })
+  }
 
   return {
     createCardFormSchema,
     onSubmitGetCards,
     onSubmitCreateCard,
     onSubmitEditCard,
+    onSubmitDeleteCard
   };
 };
 
