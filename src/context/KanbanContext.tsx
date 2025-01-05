@@ -11,7 +11,8 @@ export type Card = {
   title: string;
   description: string;
   priority: 'low' | 'medium' | 'high';
-  list: string
+  list: string,
+  board: string
 }
 
 export type Column = {
@@ -27,6 +28,7 @@ export interface KanbanContextType {
   createCard: (values: z.infer<typeof addCardSchema>, columnId: string, boardId: string) => Promise<void>
   fetchCards: (boardId: string) => Promise<void>
   fetchColumns: (boardId: string) => Promise<void>
+  editCard: (cardToMove, updates: Record<string, any>) => Promise<void>
 }
 
 const KanbanContext = createContext<KanbanContextType | undefined>(undefined)
@@ -41,7 +43,7 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
     const [ cardsData, setCardsData ] = useState<Card[]>([])
     const [ columnData, setColumnData ] = useState<Column[]>([])
   
-  const { onSubmitCreateCard, onSubmitGetCards,  } = useManageCards()
+  const { onSubmitCreateCard, onSubmitGetCards, onSubmitEditCard } = useManageCards()
 
   const createCard = async (values: AddCardFormValues, columnId: string, boardId: string) => {
     const loadingToastId = toast.loading("Creating card...");
@@ -114,8 +116,44 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
     }
   }
 
+  const editCard = async (cardToMove: any, updates: Record<string, any>) => {
+    const loadingToastId = toast.loading("Updating card...");
+    try {
+      await onSubmitEditCard(cardToMove, updates); // Realizar la actualización en el backend
+  
+      toast.update(loadingToastId, {
+        render: "Card updated successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 2500,
+        closeOnClick: true,
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage = error.response.data.message || "An error occurred";
+        toast.update(loadingToastId, {
+          render: errorMessage,
+          type: "error",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true,
+        });
+      } else {
+        toast.update(loadingToastId, {
+          render: "An unexpected error occurred",
+          type: "error",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true,
+        });
+      }
+      console.error("Failed to update card:", error);
+    }
+  };
+  
+
   return (
-    <KanbanContext.Provider value={{ cardsData, columnData, createCard, fetchCards, fetchColumns }}>
+    <KanbanContext.Provider value={{ cardsData, columnData, createCard, fetchCards, fetchColumns, editCard }}>
       {children}
     </KanbanContext.Provider>
   )

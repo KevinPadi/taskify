@@ -30,8 +30,9 @@ const useManageCards = (initialValues?: { title: string; description?: string; p
   };
   
 
-  const onSubmitEditCard = async (values: AddCardFormValues) => {
-    return axios.patch(`http://localhost:3000/api/profile/${values.title}`, values, {
+  const onSubmitEditCard = async (cardToMove: AddCardFormValues, updates: Record<string, any> ) => {
+    const { id, board, column } = cardToMove
+    return axios.patch(`${apiUrl}/api/card/${column}/${board}/${id}`, updates, {
       withCredentials: true,
     });
   };

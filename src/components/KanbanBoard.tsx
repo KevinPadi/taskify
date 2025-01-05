@@ -44,7 +44,7 @@ import { useKanban } from "@/hooks/useKanbanContext";
 // }
 
 const KanbanBoard: React.FC = () => {
-  const { cardsData, columnData } = useKanban()
+  const { cardsData, columnData, editCard } = useKanban()
   const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>({})
 
   useEffect(() => {
@@ -56,6 +56,8 @@ const KanbanBoard: React.FC = () => {
         cards: cardsData?.filter(card => card.list === column._id).map(card => ({
           id: card._id,
           content: card.title,
+          column: card.list,
+          board: card.board,
           priority: card.priority
         }))
       };
@@ -134,6 +136,8 @@ const KanbanBoard: React.FC = () => {
         ...destinationColumnData,
         cards: newDestinationCards,
       };
+
+      editCard(cardToMove, { list: destinationColumnId })
   
       // Update the state with the new columns data
       setColumnsData({
