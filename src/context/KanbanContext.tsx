@@ -120,8 +120,11 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
   const editCard = async (cardToMove: any, updates: Record<string, any>) => {
     const loadingToastId = toast.loading("Updating card...");
     try {
-      await onSubmitEditCard(cardToMove, updates)
-  
+      const res = await onSubmitEditCard(cardToMove, updates)
+      if(res.statusText === 'OK') {
+        setCardsData((prevCards) => prevCards.map((card) => card._id === cardToMove.id ? { ...card, list: updates.list } : card ))
+      }
+      console.log(res, updates)
       toast.update(loadingToastId, {
         render: "Card updated successfully!",
         type: "success",
