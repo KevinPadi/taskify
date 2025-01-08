@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import AddCardDialogDrawer from "./AddCardDialogDrawer";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface KanbanColumnTypes {
   columnId: string,
@@ -18,6 +19,9 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
   const columnRef = useRef(null); // Create a ref for the column
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
+  // Initialize AutoAnimate
+  const [parentRef] = useAutoAnimate();
+
   useEffect(() => {
     const columnEl = columnRef.current;
     invariant(columnEl); // Ensure the column element exists
@@ -32,7 +36,8 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
       getData: () => ({ columnId }),
       getIsSticky: () => true,
     });
-  }, [columnId])
+  }, [columnId]);
+
   return (
     <div
       className={`column w-60  rounded-t-md p-2 space-y-2 transition-all ease-in-out duration-300 ${isDraggedOver ? "bg-neutral-300/50 dark:bg-neutral-800/50" : ""}`}
@@ -42,12 +47,15 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
         <h2 className="text-black dark:text-white font-medium text-2xl pb-2">{title}</h2>
         <AddCardDialogDrawer column={title} columnId={columnId} />
       </div>
-      {cards && cards.map((card) => (
-        <KanbanCard key={card.id} {...card}>
-          {card.content}
-        </KanbanCard>
-      ))}
+      {/* Attach AutoAnimate ref here */}
+      <div ref={parentRef} className="space-y-2">
+        {cards && cards.map((card) => (
+          <KanbanCard key={card.id} {...card}>
+            {card.content}
+          </KanbanCard>
+        ))}
+      </div>
     </div>
   );
 }
-export default KanbanColumn
+export default KanbanColumn;
