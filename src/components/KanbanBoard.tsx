@@ -8,14 +8,15 @@ import { useKanban } from "@/hooks/useKanbanContext";
 
 const KanbanBoard: React.FC = () => {
   const { cardsData, columnData, editCard } = useKanban()
-  const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>({})
+  const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; order: number; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>({})
 
   useEffect(() => {
-    const BOARD_COLUMNS = columnData?.reduce<Record<string, { columnId: string; title: string; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>((acc, column) => {
+    const BOARD_COLUMNS = columnData?.reduce<Record<string, { columnId: string; title: string; order: number; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>((acc, column) => {
       const columnId = column._id
       acc[columnId] = {
         columnId,
         title: column.name,
+        order: column.order,
         cards: cardsData?.filter(card => card.list === column._id).map(card => ({
           id: card._id,
           content: card.title,
@@ -255,10 +256,12 @@ const KanbanBoard: React.FC = () => {
   
   return (
     <div className="board flex justify-around gap-5 size-full overflow-auto z-10">
-      {Object.keys(columnsData).map((columnId) => (
-        <KanbanColumn key={columnId} {...columnsData[columnId]} />
-      ))}
-    </div>
+      {Object.values(columnsData)
+        .sort((a, b) => a.order - b.order)
+        .map((column) => (
+          <KanbanColumn key={column.columnId} {...column} />
+        ))}
+    </div>  
   );
 };
 
