@@ -120,40 +120,45 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
   const editCard = async (cardToMove: any, updates: Record<string, any>) => {
     const loadingToastId = toast.loading("Updating card...");
     try {
-      const res = await onSubmitEditCard(cardToMove, updates)
-      if(res.statusText === 'OK') {
-        setCardsData((prevCards) => prevCards.map((card) => card._id === cardToMove.id ? { ...card, list: updates.list } : card ))
+      // Actualiza el estado local de la card sin hacer la ordenación aún
+      setCardsData((prevCards) => {
+        return prevCards.map((card) =>
+          card._id === cardToMove.id ? { ...card, ...updates } : card
+        );
+      });
+  
+      // Llama al backend para confirmar los cambios
+      const res = await onSubmitEditCard(cardToMove, updates);
+      if (res.statusText === "OK") {
+        // Después de que el backend confirme, reorganizamos las cards
+        setCardsData((prevCards) => {
+          const updatedCards = prevCards.map((card) =>
+            card._id === cardToMove.id ? { ...card, ...updates } : card
+          );
+          
+          // Ordena las cards con base en su lógica de prioridad o cualquier otro campo
+          return updatedCards.sort((a, b) => a.priority - b.priority); // Reemplaza 'priority' si es necesario
+        });
+  
+        toast.update(loadingToastId, {
+          render: "Card updated successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2500,
+          closeOnClick: true,
+        });
       }
-      console.log(res, updates)
+    } catch (error) {
       toast.update(loadingToastId, {
-        render: "Card updated successfully!",
-        type: "success",
+        render: "An error occurred",
+        type: "error",
         isLoading: false,
         autoClose: 2500,
         closeOnClick: true,
       });
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage = error.response.data.message || "An error occurred";
-        toast.update(loadingToastId, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 2500,
-          closeOnClick: true,
-        });
-      } else {
-        toast.update(loadingToastId, {
-          render: "An unexpected error occurred",
-          type: "error",
-          isLoading: false,
-          autoClose: 2500,
-          closeOnClick: true,
-        });
-      }
       console.error("Failed to update card:", error);
     }
-  };
+  };  
 
   const deleteCard = async (cardToDelete: any) => {
     const loadingToastId = toast.loading("Deleting card...");

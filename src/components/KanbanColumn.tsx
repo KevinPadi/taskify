@@ -49,7 +49,13 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
       </div>
       {/* Attach AutoAnimate ref here */}
       <div ref={parentRef} className="space-y-2">
-        {cards && cards.map((card) => (
+      {cards &&
+      cards
+        .sort((a, b) => {
+          const priorityOrder = { high: 3, medium: 2, low: 1 };
+          return priorityOrder[b.priority] - priorityOrder[a.priority];
+        })
+        .map((card) => (
           <KanbanCard key={card.id} {...card}>
             {card.content}
           </KanbanCard>

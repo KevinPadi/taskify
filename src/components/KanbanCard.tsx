@@ -107,7 +107,7 @@ const KanbanCard = ({ children, priority, ...card }: KanbanCardPropsType) => {
         {priority}
       </Badge>
       {/* render the DropIndicator if there's a closest edge */}
-      {closestEdge && <KanbanDropIndicator edge={closestEdge} gap="8px" />}
+      {/* {closestEdge && <KanbanDropIndicator edge={closestEdge} gap="8px" />} */}
     </article>
   );
 };

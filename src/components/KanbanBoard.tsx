@@ -32,34 +32,34 @@ const KanbanBoard: React.FC = () => {
   }, [columnData, cardsData])
   
   // reorder cards in columns
-  const reorderCard = useCallback(
-    ({ columnId, startIndex, finishIndex }) => {
-      // Get the source column data
-      const sourceColumnData = columnsData[columnId];
+  // const reorderCard = useCallback(
+  //   ({ columnId, startIndex, finishIndex }) => {
+  //     // Get the source column data
+  //     const sourceColumnData = columnsData[columnId];
 
-      // Call the reorder function to get a new array
-      // of cards with the moved card's new position
-      const updatedItems = reorder({
-        list: sourceColumnData.cards,
-        startIndex,
-        finishIndex,
-      });
+  //     // Call the reorder function to get a new array
+  //     // of cards with the moved card's new position
+  //     const updatedItems = reorder({
+  //       list: sourceColumnData.cards,
+  //       startIndex,
+  //       finishIndex,
+  //     });
 
-      // Create a new object for the source column 
-      // with the updated list of cards
-      const updatedSourceColumn = {
-        ...sourceColumnData,
-        cards: updatedItems,
-      };
+  //     // Create a new object for the source column 
+  //     // with the updated list of cards
+  //     const updatedSourceColumn = {
+  //       ...sourceColumnData,
+  //       cards: updatedItems,
+  //     };
 
-      // Update columns state
-      setColumnsData({
-        ...columnsData,
-        [columnId]: updatedSourceColumn,
-      });
-    },
-    [columnsData]
-  );
+  //     // Update columns state
+  //     setColumnsData({
+  //       ...columnsData,
+  //       [columnId]: updatedSourceColumn,
+  //     });
+  //   },
+  //   [columnsData]
+  // );
 
   // moving cards between columns
   const moveCard = useCallback(
@@ -180,11 +180,11 @@ const KanbanBoard: React.FC = () => {
           });
 
           // Perform the card reordering within the same column
-          reorderCard({
-            columnId: sourceColumnId,
-            startIndex: draggedCardIndex,
-            finishIndex: destinationIndex,
-          });
+          // reorderCard({
+          //   columnId: sourceColumnId,
+          //   startIndex: draggedCardIndex,
+          //   finishIndex: destinationIndex,
+          // });
 
           return;
         }
@@ -225,11 +225,11 @@ const KanbanBoard: React.FC = () => {
           });
 
           // will implement this function
-          reorderCard({
-            columnId: sourceColumnData.columnId,
-            startIndex: draggedCardIndex,
-            finishIndex: destinationIndex,
-          });
+          // reorderCard({
+          //   columnId: sourceColumnData.columnId,
+          //   startIndex: draggedCardIndex,
+          //   finishIndex: destinationIndex,
+          // });
           return;
         }
         moveCard({
@@ -241,7 +241,7 @@ const KanbanBoard: React.FC = () => {
       }
       
     }
-  },[columnsData, moveCard, reorderCard])
+  },[columnsData, moveCard])
 
   // setup the monitor
   useEffect(() => {
