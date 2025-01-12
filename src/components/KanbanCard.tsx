@@ -41,6 +41,7 @@ interface KanbanCardPropsType {
 }
 
 const KanbanCard = ({ children, priority, title, board, column, ...card }: KanbanCardPropsType) => {
+  console.log(card)
   const { deleteCard } = useKanban();
   const [isEditing, setIsEditing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -126,7 +127,7 @@ const KanbanCard = ({ children, priority, title, board, column, ...card }: Kanba
                   <Edit className="text-neutral-500 dark:text-neutral-400" />
                   <span>Edit Task</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => deleteCard(card)}>
+                <DropdownMenuItem onClick={() => deleteCard({id: card.id, board, column})}>
                   <Trash2 className="text-neutral-500 dark:text-neutral-400" />
                   <span>Delete Task</span>
                 </DropdownMenuItem>
