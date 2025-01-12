@@ -28,7 +28,6 @@ const KanbanBoard: React.FC = () => {
       return acc;
     }, {})
     setColumnsData(BOARD_COLUMNS)
-    console.log('board columns:', BOARD_COLUMNS)
   }, [columnData, cardsData])
   
   // reorder cards in columns
@@ -77,7 +76,6 @@ const KanbanBoard: React.FC = () => {
   
       // Identify the card to move
       const cardToMove = sourceColumnData.cards[movedCardIndexInSourceColumn];
-  
       // Remove the moved card from the source column
       const newSourceColumnData = {
         ...sourceColumnData,
@@ -249,10 +247,6 @@ const KanbanBoard: React.FC = () => {
       onDrop: handleDrop,
     });
   }, [handleDrop]);
-
-  useEffect(() => {
-    console.log("Columns data updated:", columnsData);
-  }, [columnsData]);
   
   return (
     <div className="board flex justify-around gap-5 size-full overflow-auto z-10">
