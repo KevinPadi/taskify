@@ -6,14 +6,13 @@ import { addCardSchema } from "@/schemas/AddCardSchema";
 
 export type AddCardFormValues = z.infer<typeof addCardSchema>;
 
-const useManageCards = (initialValues?: { title: string; description?: string; priority: 'low' | 'medium' | 'high' }) => {
+const useManageCards = (initialValues?: { title: string; priority: 'low' | 'medium' | 'high' }) => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL
 
   const createCardFormSchema = useForm<AddCardFormValues>({
     resolver: zodResolver(addCardSchema),
     defaultValues: {
       title: initialValues?.title || "",
-      description: initialValues?.description || "",
       priority: initialValues?.priority || "low",
     },
   })

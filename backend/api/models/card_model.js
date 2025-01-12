@@ -6,10 +6,6 @@ const cardSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
     priority: {
       type: String,
       required: true,

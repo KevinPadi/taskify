@@ -57,19 +57,6 @@ function AddCardForm({ className, columnId }: AddCardFormTypeProps) {
 
         <FormField
           control={createCardFormSchema.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea placeholder="Description" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={createCardFormSchema.control}
           name="priority"
           render={({ field }) => (
             <FormItem>
