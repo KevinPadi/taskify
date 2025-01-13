@@ -25,6 +25,10 @@ const ProjectCard = ({ name, imageUrl, _id }: ProjectCardProps) => {
               }
             : { backgroundColor: "var(--neutral-900)" }
         }
+        onClick={(e) => {
+          // Verifica si el clic proviene del dropdown y detén la navegación
+          if (e.defaultPrevented) return;
+        }}
       >
         {/* Degradado negro */}
         <div className="absolute inset-0 bg-gradient-to-b from-neutral-900/80 via-transparent to-transparent pointer-events-none"></div>
@@ -32,10 +36,16 @@ const ProjectCard = ({ name, imageUrl, _id }: ProjectCardProps) => {
         {/* Contenido */}
         <div className="relative z-10 p-4 flex items-center justify-between">
           <h1 className={`font-medium text-neutral-200`}>{name}</h1>
-          <CardDropdownMenu name={name} imageUrl={imageUrl} _id={_id} />
+          <CardDropdownMenu 
+            name={name} 
+            imageUrl={imageUrl} 
+            _id={_id} 
+            onInteraction={(e) => e.stopPropagation()} 
+          />
         </div>
       </article>
     </Link>
+
   );
 };
 

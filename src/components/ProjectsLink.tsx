@@ -11,7 +11,7 @@ const ProjectsLink: React.FC<{ item: { name: string; background: string; _id: st
           <span>{item.name}</span>
         </a>
       </Button>
-      <CardDropdownMenu name={item.name} imageUrl={item.background} _id={item._id} />
+      <CardDropdownMenu name={item.name} imageUrl={item.background} _id={item._id} onInteraction={(e) => e.stopPropagation()} />
       </article>
     </Link>
   )
