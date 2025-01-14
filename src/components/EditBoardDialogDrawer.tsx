@@ -30,7 +30,7 @@ const EditBoardDialogDrawer = ({ name, imageUrl, _id }: EditBoardDialogDrawerPro
             <DialogTitle className="text-neutral-900 dark:text-neutral-100 text-center">Edit board</DialogTitle>
             <DialogDescription className="sr-only">Edit board</DialogDescription>
           </DialogHeader>
-          <EditBoardForm name={name} imageUrl={imageUrl} _id={_id} />
+          <EditBoardForm name={name} imageUrl={imageUrl} _id={_id} setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     )
@@ -49,7 +49,7 @@ const EditBoardDialogDrawer = ({ name, imageUrl, _id }: EditBoardDialogDrawerPro
           <DrawerTitle className="text-neutral-900 dark:text-neutral-100 text-center">Edit board</DrawerTitle>
           <DrawerDescription className="sr-only">Edit board</DrawerDescription>
         </DrawerHeader>
-        <EditBoardForm name={name} imageUrl={imageUrl} _id={_id} className="p-4" />
+        <EditBoardForm name={name} imageUrl={imageUrl} _id={_id} className="p-4" setOpen={setOpen}/>
       </DrawerContent>
     </Drawer>
   )

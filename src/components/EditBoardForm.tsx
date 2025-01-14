@@ -22,9 +22,10 @@ type EditBoardFormProps = {
   imageUrl: string
   _id: string
   className?: string
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EditBoardForm = ({ name, imageUrl, _id, className }: EditBoardFormProps ) => {
+const EditBoardForm = ({ name, imageUrl, _id, className, setOpen }: EditBoardFormProps ) => {
   const { createBoardFormSchema } = useManageBoard({
     name: name,
     background: imageUrl
@@ -33,6 +34,7 @@ const EditBoardForm = ({ name, imageUrl, _id, className }: EditBoardFormProps ) 
 
   const onSubmit = (values: z.infer<typeof createBoardSchema>) => {
     editBoard({ values: { ...values, _id } })
+    setOpen(false)
   }
 
   return (

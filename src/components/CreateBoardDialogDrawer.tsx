@@ -28,14 +28,12 @@ import CreateBoardForm from "./CreateBoardForm";
 
 interface CreateBoardDialogDrawerProps {
   variant?: "normal" | "sidebar";
-  open?: boolean;
-  state?: "expanded" | "collapsed"
+  state?: "expanded" | "collapsed";
 }
 
 interface TriggerButtonProps {
   variant: "normal" | "sidebar";
   disabled: boolean;
-  isOpen: boolean;
 }
 
 const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
@@ -46,13 +44,16 @@ const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
           <Button
             variant="ghost"
             size="icon"
-            className={`size-8 bg-neutral-950 dark:bg-neutral-200 text-white dark:text-black ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+            disabled={disabled}
+            className={`size-8 bg-neutral-950 dark:bg-neutral-200 text-white dark:text-black ${
+              disabled ? "opacity-60 cursor-not-allowed" : ""
+            }`}
           >
             <PlusIcon className="h-4 w-4" />
             <span className="sr-only">Add New Board</span>
           </Button>
         </TooltipTrigger>
-        <TooltipContent  side="right" className="-translate-y-4">
+        <TooltipContent side="right" className="-translate-y-4">
           Add New Board
         </TooltipContent>
       </Tooltip>
@@ -62,6 +63,7 @@ const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
   // Normal variant
   return (
     <Button
+      disabled={disabled}
       className={`w-full ${
         disabled ? "opacity-60 cursor-not-allowed" : ""
       }`}
@@ -72,25 +74,34 @@ const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
   );
 };
 
-const CreateBoardDialogDrawer = ({ variant = "normal", state }: CreateBoardDialogDrawerProps) => {
+const CreateBoardDialogDrawer = ({
+  variant = "normal",
+  state,
+}: CreateBoardDialogDrawerProps) => {
   const [isOpen, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const { boards } = useBoard();
 
   const isDisabled = boards.length === 5;
+
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setOpen}>
-        <DialogTrigger asChild={ variant === "sidebar" ? true : false}>
+        <DialogTrigger asChild disabled={isDisabled}>
           {variant === "sidebar" && state === "expanded" ? (
-            <Button variant="default" size="sm" className={`w-full ${
-              isDisabled ? "opacity-60 cursor-not-allowed" : ""
-            }`}>
+            <Button
+              variant="default"
+              size="sm"
+              disabled={isDisabled}
+              className={`w-full ${
+                isDisabled ? "opacity-60 cursor-not-allowed" : ""
+              }`}
+            >
               <PlusIcon className="mr-2 h-4 w-4" />
               Add New Board
             </Button>
           ) : (
-            <TriggerButton variant={variant} disabled={isDisabled} isOpen={state === "expanded"} />
+            <TriggerButton variant={variant} disabled={isDisabled} />
           )}
         </DialogTrigger>
         <DialogContent className="max-w-[425px] rounded-2xl">
@@ -98,9 +109,11 @@ const CreateBoardDialogDrawer = ({ variant = "normal", state }: CreateBoardDialo
             <DialogTitle className="text-neutral-900 dark:text-neutral-100 text-center">
               Create board
             </DialogTitle>
-            <DialogDescription className="sr-only">Create a new board</DialogDescription>
+            <DialogDescription className="sr-only">
+              Create a new board
+            </DialogDescription>
           </DialogHeader>
-          <CreateBoardForm />
+          <CreateBoardForm setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     );
@@ -108,16 +121,21 @@ const CreateBoardDialogDrawer = ({ variant = "normal", state }: CreateBoardDialo
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
-      <DrawerTrigger asChild={ variant === "sidebar" ? true : false}>
+      <DrawerTrigger asChild disabled={isDisabled}>
         {variant === "sidebar" && (state === "expanded" || !isDesktop) ? (
-          <Button variant="default" size="sm" className={`w-full ${
-            isDisabled ? "opacity-60 cursor-not-allowed" : ""
-          }`}>
+          <Button
+            variant="default"
+            size="sm"
+            disabled={isDisabled}
+            className={`w-full ${
+              isDisabled ? "opacity-60 cursor-not-allowed" : ""
+            }`}
+          >
             <PlusIcon className="mr-2 h-4 w-4" />
             Add New Board
           </Button>
         ) : (
-          <TriggerButton variant={variant} disabled={isDisabled} isOpen={state === "expanded"} />
+          <TriggerButton variant={variant} disabled={isDisabled} />
         )}
       </DrawerTrigger>
       <DrawerContent>
@@ -125,13 +143,14 @@ const CreateBoardDialogDrawer = ({ variant = "normal", state }: CreateBoardDialo
           <DrawerTitle className="text-neutral-900 dark:text-neutral-100 text-center">
             Create board
           </DrawerTitle>
-          <DrawerDescription className="sr-only">Create a new board</DrawerDescription>
+          <DrawerDescription className="sr-only">
+            Create a new board
+          </DrawerDescription>
         </DrawerHeader>
-        <CreateBoardForm className="p-4" />
+        <CreateBoardForm className="p-4" setOpen={setOpen} />
       </DrawerContent>
     </Drawer>
   );
 };
 
 export default CreateBoardDialogDrawer;
-
