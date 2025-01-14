@@ -53,7 +53,10 @@ export function NavMain({ items }: NavMainProps) {
                     {items?.map((subItem) => (
                       <SidebarMenuItem key={subItem.name}>
                         <SidebarMenuButton asChild>
-                          <Link to={`/kanban/${subItem.name}`}>
+                          <Link 
+                            to={`/kanban/${subItem.name}/${subItem._id}`}
+                            state={{ imageUrl: subItem.background }}
+                          >
                             <span className="dark:text-neutral-300">{subItem.name}</span>
                           </Link>
                         </SidebarMenuButton>
