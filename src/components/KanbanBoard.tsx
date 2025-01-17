@@ -249,14 +249,16 @@ const KanbanBoard: React.FC = () => {
   }, [handleDrop]);
   
   return (
-    <div className="board flex justify-around gap-5 size-full overflow-auto z-10">
+    <div className="board justify-between gap-5 p-4 w-full grid auto-cols-[300px] grid-flow-col overflow-x-auto">
       {Object.values(columnsData)
         .sort((a, b) => a.order - b.order)
         .map((column) => (
           <KanbanColumn key={column.columnId} {...column} />
         ))}
-    </div>  
+    </div>
+
   );
+    
 };
 
 export default KanbanBoard

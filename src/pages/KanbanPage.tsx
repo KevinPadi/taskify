@@ -38,7 +38,7 @@ export default function KanbanPage() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="overflow-x-auto">
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
@@ -61,12 +61,12 @@ export default function KanbanPage() {
           </div>
         </header>
         <div 
-          className="flex flex-1 flex-col gap-4 p-4 relative bg-cover rounded-md" 
+          className="flex flex-1 flex-col p-4 relative bg-cover rounded-md w-full" 
           style={{
           backgroundImage: imageUrl === 'none' ? '' : `url(${imageUrl})`}}
         >
           {/* Degradado negro */}
-          <div className="absolute inset-0 bg-neutral-900/20 pointer-events-none"></div>
+          {/* <div className="absolute inset-0 bg-neutral-900/20 pointer-events-none"></div> */}
           {loading ? (
             <p>Loading...</p>
           ) : (
