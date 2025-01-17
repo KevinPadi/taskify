@@ -3,7 +3,7 @@ import axios from "axios"
 import { toast } from "material-react-toastify"
 import useManageBoard from "@/hooks/useManageBoard"
 
-interface Board {
+export interface Board {
   _id: string
   name: string
   background: string
@@ -47,8 +47,9 @@ const createBoard = async ({ values }: ValuesProps): Promise<void> => {
     setLoading(true)
     setError(null)
     const { data } = await  onSubmitCreateBoard(values)
+    console.log(data.board)
     
-    setBoards((prev) => [...prev, data])
+    setBoards((prev) => [...prev, data.board])
     
     toast.update(loadingToastId, {
       render: "Board created successfully!",

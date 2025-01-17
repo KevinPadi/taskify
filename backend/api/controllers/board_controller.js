@@ -1,5 +1,5 @@
 import Board from '../models/board_model.js'
-
+import List from '../models/list_model.js'
 // create board
 export const createBoard = async (req, res) => {
   try {
@@ -10,11 +10,24 @@ export const createBoard = async (req, res) => {
       createdBy: req.user.id
     })
     await newBoard.save()
-    res.status(201).json(newBoard)
+
+    // Define las listas predefinidas
+    const predefinedLists = ["Backlog", "To Do", "In Progress", "Done"]
+    const lists = predefinedLists.map((name, index) => ({
+      name,
+      board: newBoard._id,
+      order: index + 1, // El orden será 1, 2, 3, 4
+    }))
+
+    // Inserta las listas en la base de datos
+    await List.insertMany(lists)
+
+    res.status(201).json({ board: newBoard, lists })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
 }
+
 
 // get user boards
 export const getBoards = async (req, res) => {

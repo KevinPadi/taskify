@@ -4,9 +4,8 @@ import { ToastContainer } from 'material-react-toastify';
 import 'material-react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from "./components/ProtectedRoute";
-// import Dashboard from "./pages/Dashboard";
-// import Page from "./app/dashboard/page";
 import BoardsPage from "./pages/BoardsPage";
+import KanbanPage from "./pages/KanbanPage";
 
 function App() {
   return (
@@ -17,23 +16,22 @@ function App() {
           />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              {/* <Route 
-                path="/dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } 
-              /> */}
               <Route 
                 path="/boards"
                 element={
                   <ProtectedRoute>
-                    {/* <Page /> */}
                     <BoardsPage />
                   </ProtectedRoute>
                 } 
               />
+                <Route 
+                  path="/kanban/:board/:boardId" 
+                  element={
+                    <ProtectedRoute>
+                      <KanbanPage />
+                    </ProtectedRoute>
+                  } 
+                />
             </Routes>
         </ThemeProvider>
       </Router>

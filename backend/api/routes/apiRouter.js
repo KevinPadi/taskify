@@ -54,7 +54,7 @@ apiRouter.patch('/list/:boardId/:id', auth, updateList);
 apiRouter.delete('/list/:boardId/:id', auth, deleteList);
 
 // Rutas de cards
-apiRouter.get('/card/:listId/:boardId', auth, getCards);
+apiRouter.get('/card/:boardId', auth, getCards);
 apiRouter.post('/card/:listId/:boardId', auth, validateSchema(cardSchema), createCard);
 apiRouter.patch('/card/:listId/:boardId/:id', auth, updateCard);
 apiRouter.delete('/card/:listId/:boardId/:id', auth, deleteCard);

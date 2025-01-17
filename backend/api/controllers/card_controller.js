@@ -20,7 +20,7 @@ export const getCards = async (req, res) => {
 // create card
 export const createCard = async (req, res) => {
   try {
-    const { title, description, priority } = req.body
+    const { title, priority } = req.body
 
     if (!title) {
       return res.status(400).json({ message: 'Title is required' })
@@ -33,7 +33,6 @@ export const createCard = async (req, res) => {
 
     const newCard = new Card({
       title,
-      description,
       priority,
       list: req.params.listId,
       board: req.params.boardId,
@@ -51,7 +50,7 @@ export const createCard = async (req, res) => {
 export const updateCard = async (req, res) => {
   try {
     const { id } = req.params
-    const { title, description, priority, list } = req.body
+    const { title, priority, list } = req.body
 
     const boardExists = await Board.findOne({ _id: req.params.boardId, createdBy: req.user.id })
     if (!boardExists) {
@@ -64,7 +63,6 @@ export const updateCard = async (req, res) => {
     }
 
     if (title !== undefined) card.title = title
-    if (description !== undefined) card.description = description
     if (priority !== undefined) card.priority = priority
     if (list !== undefined) {
       const listid = new ObjectId(list)

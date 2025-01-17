@@ -56,3 +56,11 @@ html.light {
     --sidebar-ring: 217.2 91.2% 59.8%
   }
 }
+
+.edge-top {
+  top: calc(-0.65 * (var(--gap, 0px) + 2px));
+}
+
+.edge-bottom {
+  bottom: calc(-0.65 * (var(--gap, 0px) + 2px));
+}

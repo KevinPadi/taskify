@@ -109,7 +109,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const cookies = Cookies.get()
         setUser(res.data)
         localStorage.setItem('user', JSON.stringify(res.data))
-        console.log(JSON.stringify(res.data))
         setIsAuthenticated(true);
         localStorage.setItem("token", cookies.token)
       }
@@ -216,7 +215,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (res.data) {
           setIsAuthenticated(true);
           setUser(res.data)
-          console.log(res.data  )
         } else {
           setIsAuthenticated(false);
           localStorage.removeItem("token");

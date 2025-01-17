@@ -17,12 +17,18 @@ import { createBoardSchema } from "@/schemas/CreateBoardSchema"
 import useManageBoard from "@/hooks/useManageBoard"
 import { useBoard } from "@/hooks/useBoardContext"
 
-const CreateBoardForm = ({ className }: React.ComponentProps<"form">) => {
+type CreateBoardFormProps = React.ComponentProps<"form"> & {
+  className?: string;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CreateBoardForm = ({ className, setOpen }: CreateBoardFormProps) => {
   const { createBoardFormSchema } = useManageBoard()
   const { createBoard } = useBoard()
 
   const onSubmit = (values: z.infer<typeof createBoardSchema>) => {
     createBoard({ values })
+    setOpen(false)
   }
 
   return (

@@ -1,16 +1,6 @@
-import * as React from "react"
-import {
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Kanban,
-} from "lucide-react"
-
 import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { SidebarLogoHeader } from "@/components/SidebarHeader"
 import {
   Sidebar,
   SidebarContent,
@@ -18,74 +8,26 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-
-// This is sample data.
-const data = {
-  user: {
-    name: "Kevin Padilla",
-    email: "kpadilla@taskify.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Taskify",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    }
-  ],
-  navMain: [
-    {
-      title: "Boards",
-      url: "/",
-      icon: Kanban,
-      isActive: false,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+import { useBoard } from "@/hooks/useBoardContext"
+import { useEffect } from "react"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { boards, fetchBoards } = useBoard()
+
+  useEffect(() => {
+    fetchBoards()
+  } ,[])
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props} className="border-transparent">
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarLogoHeader />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={boards} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
