@@ -64,12 +64,14 @@ const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
   return (
     <Button
       disabled={disabled}
-      className={`w-full ${
+      className={`w-fit  ${
         disabled ? "opacity-60 cursor-not-allowed" : ""
       }`}
     >
-      <PlusIcon className="mr-2 h-4 w-4" />
-      Add new board
+      <PlusIcon className="md:mr-2 h-4 w-4" />
+      <span className="hidden md:block">
+        Add new board
+      </span>
     </Button>
   );
 };
