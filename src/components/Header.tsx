@@ -13,7 +13,7 @@ const Header = () => {
       <div className="flex justify-between">
         <span>LOGO 🎉</span>
         <div className="space-x-1 flex items-center">
-          <Button variant={'ghost'} className="text-black dark:text-white px-0">
+          <Button variant={'ghost'} className="text-black dark:text-white px-0 md:px-2">
             <a href="https://github.com/KevinPadi/taskify/issues/new?title=Feedback&body=Describe%20your%20feedback%20here." target="_blank" rel="noopener noreferrer" className="flex justify-start font-normal w-full gap-2">
               <Send />
               <span className="leading-none hidden sm:block">Feedback</span>
