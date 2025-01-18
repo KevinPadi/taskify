@@ -61,14 +61,14 @@ function AddCardForm({ className, columnId }: AddCardFormTypeProps) {
           render={({ field }) => (
             <FormItem>
               <div className="grid grid-flow-col items-center justify-between gap-2">
-                <Label>Select priority:</Label>
+                <Label className="text-black dark:text-white">Select priority:</Label>
                 <FormControl>
                   <Select
                     value={field.value}
                     onValueChange={field.onChange}
                     defaultValue="low"
                   >
-                    <SelectTrigger className="w-40">
+                    <SelectTrigger className="w-40 text-black dark:text-white">
                       <SelectValue placeholder="Priority" />
                     </SelectTrigger>
                     <SelectContent>
