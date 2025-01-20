@@ -1,4 +1,5 @@
 import { useAuth } from '@/hooks/useAuth'
+import { Loader } from 'lucide-react'
 import { Navigate } from 'react-router-dom'
 
 type ProtectedRouteProps = {
@@ -9,7 +10,9 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth()
 
   if (isAuthenticated === false) {
-    return <p>Loading...</p>
+    return (
+      <Loader className='animate-spin size-10 mx-auto mt-40' />
+    )
   }
 
   return isAuthenticated ? children : <Navigate to="/" />
