@@ -8,13 +8,6 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth()
-
-  if (isAuthenticated === false) {
-    return (
-      <Loader className='animate-spin size-10 mx-auto mt-40 text-black dark:text-white' />
-    )
-  }
-
   return isAuthenticated ? children : <Navigate to="/" />
 }
 
