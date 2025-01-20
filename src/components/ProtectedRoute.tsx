@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   if (isAuthenticated === false) {
     return (
-      <Loader className='animate-spin size-10 mx-auto mt-40 text-white dark:text-black' />
+      <Loader className='animate-spin size-10 mx-auto mt-40 text-black dark:text-white' />
     )
   }
 
