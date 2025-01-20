@@ -17,7 +17,7 @@ const ProjectsCardsCntr = () => {
                 {boardsRemaining} boards remaining
               </p>
             </div>
-            <CreateBoardDialogDrawer />
+            <CreateBoardDialogDrawer variant="normal" />
             </div>
           <div className="grid auto-rows-min gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {

@@ -58,11 +58,9 @@ const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
         </TooltipContent>
       </Tooltip>
     );
-  }
-
-  // Normal variant
-  return (
-    <Button
+  } else {
+    return (
+      <Button
       disabled={disabled}
       className={`w-fit  ${
         disabled ? "opacity-60 cursor-not-allowed" : ""
@@ -73,7 +71,9 @@ const TriggerButton = ({ variant, disabled }: TriggerButtonProps) => {
         Add new board
       </span>
     </Button>
-  );
+    )
+  }
+
 };
 
 const CreateBoardDialogDrawer = ({
@@ -89,7 +89,7 @@ const CreateBoardDialogDrawer = ({
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setOpen}>
-        <DialogTrigger asChild disabled={isDisabled}>
+        <DialogTrigger asChild={variant !== 'normal' && true } disabled={isDisabled} >
           {variant === "sidebar" && state === "expanded" ? (
             <Button
               variant="default"
@@ -123,7 +123,7 @@ const CreateBoardDialogDrawer = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
-      <DrawerTrigger asChild disabled={isDisabled}>
+      <DrawerTrigger asChild={variant !== 'normal' && true } disabled={isDisabled}>
         {variant === "sidebar" && (state === "expanded" || !isDesktop) ? (
           <Button
             variant="default"
