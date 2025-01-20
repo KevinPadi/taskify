@@ -1,4 +1,5 @@
 import { useAuth } from '@/hooks/useAuth'
+import { Loader } from 'lucide-react'
 import { Navigate } from 'react-router-dom'
 
 type ProtectedRouteProps = {
@@ -7,11 +8,6 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth()
-
-  if (isAuthenticated === false) {
-    return <p>Loading...</p>
-  }
-
   return isAuthenticated ? children : <Navigate to="/" />
 }
 

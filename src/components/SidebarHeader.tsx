@@ -1,22 +1,28 @@
 import {
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
 import CreateBoardDialogDrawer from "./CreateBoardDialogDrawer"
+import Logo from "./Logo"
 
 export function SidebarLogoHeader() {
   const { state, open } = useSidebar()
 
   return (
     <SidebarMenu>
-      <SidebarMenuItem className="space-y-4">
-        <div className="flex items-center gap-2 p-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-300 text-black font-bold">
-            T
+      <SidebarMenuItem>
+        <SidebarMenuButton size="lg" className="pointer-events-none">
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+            <Logo className="aspect-square" />
           </div>
-          <span className="font-semibold">Taskify</span>
-        </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold text-lg">Taskify</span>
+          </div>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+      <SidebarMenuItem>
         <CreateBoardDialogDrawer variant='sidebar' open={open} state={state} />
       </SidebarMenuItem>
     </SidebarMenu>
