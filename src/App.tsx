@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from "./components/ProtectedRoute";
 import BoardsPage from "./pages/BoardsPage";
 import KanbanPage from "./pages/KanbanPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -31,6 +32,12 @@ function App() {
                       <KanbanPage />
                     </ProtectedRoute>
                   } 
+                />
+                <Route 
+                  path="*"
+                  element={
+                    <NotFoundPage />
+                  }
                 />
             </Routes>
         </ThemeProvider>
