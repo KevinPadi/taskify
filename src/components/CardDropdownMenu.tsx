@@ -12,7 +12,7 @@ type cardDropdownMenuProps = {
 
 } 
 
-const CardDropdownMenu = ({ name, imageUrl, _id, onInteraction }: cardDropdownMenuProps & { onInteraction: (e: React.MouseEvent) => void }) => {
+const CardDropdownMenu = ({ name, imageUrl, _id, onInteraction }: cardDropdownMenuProps & { onInteraction?: (e: React.MouseEvent) => void }) => {
   const { deleteBoard } = useBoard();
 
   return (
@@ -22,7 +22,7 @@ const CardDropdownMenu = ({ name, imageUrl, _id, onInteraction }: cardDropdownMe
           variant={"ghost"} 
           size={"icon"} 
           className="size-7 flex items-center"
-          onClick={(e) => onInteraction(e)}
+          onClick={(e) => onInteraction && onInteraction(e)}
         >
           <MoreHorizontal className="stroke-neutral-200" />
           <span className="sr-only">More</span>
@@ -30,10 +30,10 @@ const CardDropdownMenu = ({ name, imageUrl, _id, onInteraction }: cardDropdownMe
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         className="w-48 rounded-lg"
-        onClick={(e) => onInteraction(e)}
+        onClick={(e) => onInteraction && onInteraction(e)}
         align="end"
       >
-        <DropdownMenuItem onClick={(e) => onInteraction(e)}>
+        <DropdownMenuItem onClick={(e) => onInteraction && onInteraction(e)}>
           <SquareArrowOutUpRight className="text-neutral-500 dark:text-neutral-400" />
           <Link
             to={`/kanban/${name}/${_id}`}
@@ -42,13 +42,13 @@ const CardDropdownMenu = ({ name, imageUrl, _id, onInteraction }: cardDropdownMe
             Go to board
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild onClick={(e) => onInteraction(e)}>
+        <DropdownMenuItem asChild onClick={(e) => onInteraction && onInteraction(e)}>
           <EditBoardDialogDrawer name={name} imageUrl={imageUrl} _id={_id} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem 
           onClick={(e) => {
-            onInteraction(e); 
+            if(onInteraction) onInteraction(e) 
             deleteBoard(_id);
           }}
           className="hover:cursor-pointer"

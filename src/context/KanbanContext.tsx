@@ -3,7 +3,7 @@ import axios from "axios"
 import { toast } from "material-react-toastify"
 import { addCardSchema } from "@/schemas/AddCardSchema"
 import { z } from "zod"
-import useManageCards from "@/hooks/useManageCards"
+import useManageCards, { CardUpdates } from "@/hooks/useManageCards"
 import { AddCardFormValues } from "@/hooks/useManageCards"
 
 export type Card = {
@@ -28,8 +28,8 @@ export interface KanbanContextType {
   createCard: (values: z.infer<typeof addCardSchema>, columnId: string, boardId: string) => Promise<void>
   fetchCards: (boardId: string) => Promise<void>
   fetchColumns: (boardId: string) => Promise<void>
-  editCard: (cardToMove, updates: Record<string, any>) => Promise<void>
-  deleteCard: (cardToDelete) => Promise<void>
+  editCard: (cardToMove: AddCardFormValues, updates: CardUpdates) => Promise<void>
+  deleteCard: (cardToDelete: AddCardFormValues) => Promise<void>
 }
 
 const KanbanContext = createContext<KanbanContextType | undefined>(undefined)
@@ -117,7 +117,7 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
     }
   }
 
-  const editCard = async (cardToMove: any, updates: Record<string, any>) => {
+  const editCard = async (cardToMove: AddCardFormValues, updates: CardUpdates) => {
     const loadingToastId = toast.loading("Updating card...");
     try {
       // Actualiza el estado local de la card sin hacer la ordenación aún
@@ -137,7 +137,13 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
           );
           
           // Ordena las cards con base en su lógica de prioridad o cualquier otro campo
-          return updatedCards.sort((a, b) => a.priority - b.priority); // Reemplaza 'priority' si es necesario
+          const priorityMap = {
+            low: 1,
+            medium: 2,
+            high: 3,
+          };
+          
+          return updatedCards.sort((a, b) => priorityMap[a.priority] - priorityMap[b.priority])
         });
   
         toast.update(loadingToastId, {
@@ -160,13 +166,16 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
     }
   };  
 
-  const deleteCard = async (cardToDelete: any) => {
+  const deleteCard = async (cardToDelete: AddCardFormValues) => {
     const loadingToastId = toast.loading("Deleting card...");
     try {
       await onSubmitDeleteCard(cardToDelete)
       const deletedCardIndex = cardsData.findIndex((card) => card._id === cardToDelete.id)
-      const newArray = cardsData.toSpliced(deletedCardIndex, 1)
-      setCardsData(newArray)
+      const newArray = [
+        ...cardsData.slice(0, deletedCardIndex),
+        ...cardsData.slice(deletedCardIndex + 1),
+      ];
+            setCardsData(newArray)
       toast.update(loadingToastId, {
         render: "Card deleted successfully",
         type: "success",

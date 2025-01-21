@@ -4,7 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { addCardSchema } from "@/schemas/AddCardSchema";
 
-export type AddCardFormValues = z.infer<typeof addCardSchema>;
+export type AddCardFormValues = z.infer<typeof addCardSchema>
+
+export type CardUpdates = {
+  title: string
+  priority: 'low' | 'medium' | 'high'
+  column: string
+  board: string
+  id: string
+}
 
 const useManageCards = (initialValues?: { title: string; priority: 'low' | 'medium' | 'high' }) => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL
@@ -29,7 +37,7 @@ const useManageCards = (initialValues?: { title: string; priority: 'low' | 'medi
   };
   
 
-  const onSubmitEditCard = async (cardToMove: AddCardFormValues, updates: Record<string, any> ) => {
+  const onSubmitEditCard = async (cardToMove: AddCardFormValues, updates: CardUpdates ) => {
     const { id, board, column } = cardToMove
     return axios.patch(`${apiUrl}/api/card/${column}/${board}/${id}`, updates, {
       withCredentials: true,

@@ -1,8 +1,6 @@
 import KanbanColumn from "./KanbanColumn"
 import { useEffect, useState, useCallback } from "react";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { getReorderDestinationIndex } from "@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index"
-import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder"
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
 import { useKanban } from "@/hooks/useKanbanContext";
 
@@ -61,13 +59,46 @@ const KanbanBoard: React.FC = () => {
   // );
 
   // moving cards between columns
+
+  type MoveCardParams = {
+    movedCardIndexInSourceColumn: number;
+    sourceColumnId: string;
+    destinationColumnId: string;
+    movedCardIndexInDestinationColumn?: number;
+  }
+
+  type DropParams = {
+    source: {
+      data: {
+        type: string; // Debe ser "card"
+        cardId: string;
+      };
+    };
+    location: {
+      current: {
+        dropTargets: Array<{
+          data: {
+            columnId?: string;
+            cardId?: string;
+          };
+        }>;
+      };
+      initial: {
+        dropTargets: Array<{
+          data: {
+            columnId: string;
+          };
+        }>;
+      };
+    };
+  };
   const moveCard = useCallback(
     ({
       movedCardIndexInSourceColumn,
       sourceColumnId,
       destinationColumnId,
       movedCardIndexInDestinationColumn,
-    }) => {
+    }: MoveCardParams) => {
       // Get data of the source column
       const sourceColumnData = columnsData[sourceColumnId];
   
@@ -112,7 +143,7 @@ const KanbanBoard: React.FC = () => {
   );
 
   // Function to handle drop events
-  const handleDrop = useCallback(({ source, location }) => {
+  const handleDrop = useCallback(({ source, location }: DropParams) => {
     // Early return if there are no drop targets in the current location
     const destination = location.current.dropTargets.length;
     if (!destination) {
@@ -155,7 +186,7 @@ const KanbanBoard: React.FC = () => {
         const destinationColumnId = destinationColumnRecord.data.columnId;
 
         // Retrieve the destination column data using the destination column ID
-        const destinationColumn = columnsData[destinationColumnId];
+        const destinationColumn = columnsData[destinationColumnId]
 
         // Find the index of the target card within the destination column's cards
         const indexOfTarget = destinationColumn.cards.findIndex(
@@ -170,12 +201,12 @@ const KanbanBoard: React.FC = () => {
         // Check if the source and destination columns are the same
         if (sourceColumnId === destinationColumnId) {
           // Calculate the destination index for the card to be reordered within the same column
-          const destinationIndex = getReorderDestinationIndex({
-            startIndex: draggedCardIndex,
-            indexOfTarget,
-            closestEdgeOfTarget,
-            axis: "vertical",
-          });
+          // const destinationIndex = getReorderDestinationIndex({
+          //   startIndex: draggedCardIndex,
+          //   indexOfTarget,
+          //   closestEdgeOfTarget,
+          //   axis: "vertical",
+          // });
 
           // Perform the card reordering within the same column
           // reorderCard({
@@ -200,7 +231,7 @@ const KanbanBoard: React.FC = () => {
         moveCard({
           movedCardIndexInSourceColumn: draggedCardIndex,
           sourceColumnId,
-          destinationColumnId,
+          destinationColumnId: destinationColumnId,
           movedCardIndexInDestinationColumn: destinationIndex,
         });
       }
@@ -215,12 +246,12 @@ const KanbanBoard: React.FC = () => {
         // check if the source and destination columns are the same
         if (sourceColumnId === destinationColumnId) {
           // Calculate the destination index for the dragged card within the same column
-          const destinationIndex = getReorderDestinationIndex({
-            startIndex: draggedCardIndex,
-            indexOfTarget: sourceColumnData.cards.length - 1,
-            closestEdgeOfTarget: null,
-            axis: "vertical",
-          });
+          // const destinationIndex = getReorderDestinationIndex({
+          //   startIndex: draggedCardIndex,
+          //   indexOfTarget: sourceColumnData.cards.length - 1,
+          //   closestEdgeOfTarget: null,
+          //   axis: "vertical",
+          // });
 
           // will implement this function
           // reorderCard({

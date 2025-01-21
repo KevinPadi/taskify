@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
 import { Label } from "./ui/label";
@@ -16,12 +15,11 @@ import {
 } from "@/components/ui/form";
 import { addCardSchema } from "@/schemas/AddCardSchema";
 import useManageCards from "@/hooks/useManageCards";
-import React from "react";
 import { useKanban } from "@/hooks/useKanbanContext";
 import { useParams } from "react-router-dom";
 
 type AddCardFormTypeProps = {
-  className?: React.ComponentProps<"form">,
+  className?: string,
   columnId: string
 }
 
@@ -32,7 +30,7 @@ function AddCardForm({ className, columnId }: AddCardFormTypeProps) {
   const { createCardFormSchema } = useManageCards()
 
   const onSubmit = (values: z.infer<typeof addCardSchema>) => {
-    createCard(values, columnId, boardId)
+    if(boardId) createCard(values, columnId, boardId)
     console.log(values)
   };
 
