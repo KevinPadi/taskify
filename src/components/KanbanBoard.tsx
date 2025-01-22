@@ -7,30 +7,48 @@ import type { BaseEventPayload, ElementDragType } from "@atlaskit/pragmatic-drag
 
 const KanbanBoard: React.FC = () => {
   const { cardsData, columnData, editCard } = useKanban()
+  console.log(cardsData)
   const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; order: number; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>({})
 
   useEffect(() => {
-    const BOARD_COLUMNS = columnData?.reduce<Record<string, { columnId: string; title: string; order: number; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high'; board: string }[] }>>(
-      (acc, column) => {
-        const columnId = column._id;
-        acc[columnId] = {
-          columnId,
-          title: column.name,
-          order: column.order,
-          cards: cardsData?.filter(card => card.list === column._id).map(card => ({
+    const BOARD_COLUMNS = columnData?.reduce<
+      Record<
+        string,
+        {
+          columnId: string;
+          title: string;
+          order: number;
+          cards: {
+            id: string;
+            title: string; // Cambiado de content a title
+            content: string; // Si aún necesitas content
+            priority: 'low' | 'medium' | 'high';
+            board: string;
+            column: string;
+          }[];
+        }
+      >
+    >((acc, column) => {
+      const columnId = column._id;
+      acc[columnId] = {
+        columnId,
+        title: column.name,
+        order: column.order,
+        cards: cardsData
+          ?.filter(card => card.list === column._id)
+          .map(card => ({
             id: card._id,
-            content: card.title,
+            title: card.title, // Asegúrate de que coincida con lo que espera editCard
+            content: card.title, // Si aún necesitas el content para otro propósito
+            column: card.list,
+            board: card.board,
             priority: card.priority,
-            board: card.board
           })),
-        };
-        return acc;
-      },
-      {}
-    );
+      };
+      return acc;
+    }, {});
     setColumnsData(BOARD_COLUMNS);
   }, [columnData, cardsData]);
-  
   
   // reorder cards in columns
   // const reorderCard = useCallback(
@@ -106,8 +124,7 @@ const KanbanBoard: React.FC = () => {
       const newFinishColumnData = {
         ...destinationColumnData,
         cards: newDestinationCards,
-      };
-
+      }
       editCard(cardToMove, { list: destinationColumnId })
   
       // Update the state with the new columns data

@@ -35,9 +35,9 @@ interface KanbanCardPropsType {
   id: string;
   content: string
   priority: "low" | "medium" | "high";
-  title: string;
-  board: string
-  column: string
+  title?: string;
+  board?: string
+  column?: string
 }
 
 const KanbanCard = ({ children, priority, title, board, column, ...card }: KanbanCardPropsType) => {

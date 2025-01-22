@@ -12,7 +12,6 @@ interface KanbanColumnTypes {
     id: string,
     content: string,
     priority: 'low' | 'medium' | 'high'
-    board: string
   }>
 }
 
