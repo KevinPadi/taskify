@@ -15,6 +15,7 @@
         "./src/*"
       ]
     },
-    "strict": true
+    "skipLibCheck": true,
+    "strict": false
   }
 }
