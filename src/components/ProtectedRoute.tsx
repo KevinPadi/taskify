@@ -1,5 +1,4 @@
 import { useAuth } from '@/hooks/useAuth'
-import { Loader } from 'lucide-react'
 import { Navigate } from 'react-router-dom'
 
 type ProtectedRouteProps = {
