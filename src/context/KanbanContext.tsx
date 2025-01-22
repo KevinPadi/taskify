@@ -29,7 +29,7 @@ export interface KanbanContextType {
   fetchCards: (boardId: string) => Promise<void>
   fetchColumns: (boardId: string) => Promise<void>
   editCard: (cardToMove: AddCardFormValues, updates: CardUpdates) => Promise<void>
-  deleteCard: (cardToDelete: AddCardFormValues) => Promise<void>
+  deleteCard: (cardToDelete: CardUpdates) => Promise<void>
 }
 
 const KanbanContext = createContext<KanbanContextType | undefined>(undefined)
@@ -166,7 +166,7 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
     }
   };  
 
-  const deleteCard = async (cardToDelete: AddCardFormValues) => {
+  const deleteCard = async (cardToDelete: CardUpdates) => {
     const loadingToastId = toast.loading("Deleting card...");
     try {
       await onSubmitDeleteCard(cardToDelete)

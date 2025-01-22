@@ -6,17 +6,18 @@ import AddCardDialogDrawer from "./AddCardDialogDrawer";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface KanbanColumnTypes {
-  columnId: string,
+  column: string,
   title: string,
   cards: Array<{
+    column: string,
     id: string,
-    content: string,
+    title: string,
     priority: 'low' | 'medium' | 'high'
     board: string
   }>
 }
 
-const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
+const KanbanColumn = ({ column, title, cards }: KanbanColumnTypes) => {
   const columnRef = useRef(null); // Create a ref for the column
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
@@ -34,10 +35,10 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
       onDragEnter: () => setIsDraggedOver(true),
       onDragLeave: () => setIsDraggedOver(false),
       onDrop: () => setIsDraggedOver(false),
-      getData: () => ({ columnId }),
+      getData: () => ({ column }),
       getIsSticky: () => true,
     });
-  }, [columnId]);
+  }, [column]);
 
   return (
     <div
@@ -51,7 +52,7 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
         <h2 className="text-black dark:text-white font-medium text-2xl pb-2">
           {title}
         </h2>
-        <AddCardDialogDrawer column={title} columnId={columnId} />
+        <AddCardDialogDrawer column={title} columnId={column} />
       </div>
       {/* Attach AutoAnimate ref here */}
       <div ref={parentRef} className="space-y-2">
@@ -63,7 +64,7 @@ const KanbanColumn = ({ columnId, title, cards }: KanbanColumnTypes) => {
             })
             .map((card) => (
               <KanbanCard key={card.id} {...card}>
-                {card.content}
+                {card.title}
               </KanbanCard>
             ))}
       </div>

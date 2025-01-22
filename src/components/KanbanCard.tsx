@@ -33,7 +33,6 @@ type FormData = z.infer<typeof schema>;
 interface KanbanCardPropsType {
   children: React.ReactNode;
   id: string;
-  content: string
   priority: "low" | "medium" | "high";
   title: string;
   board: string
@@ -100,7 +99,7 @@ const KanbanCard = ({ children, priority, title, board, column, ...card }: Kanba
                 render={({ field }) => (
                   <Input
                     {...field}
-                    defaultValue={card.content}
+                    defaultValue={title}
                     className="text-base bg-transparent focus:bg-neutral-200 hover:bg-neutral-300 dark:focus:bg-neutral-900/80 hover:dark:bg-neutral-800 dark:bg-transparent border-none p-0 m-0 top-0 h-fit select-all rounded-sm"
                     autoFocus
                   />

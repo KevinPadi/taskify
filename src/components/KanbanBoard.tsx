@@ -129,7 +129,7 @@ const KanbanBoard: React.FC = () => {
         ...destinationColumnData,
         cards: newDestinationCards,
       };
-
+  
       editCard(cardToMove, { list: destinationColumnId })
   
       // Update the state with the new columns data

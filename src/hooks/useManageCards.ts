@@ -7,11 +7,11 @@ import { addCardSchema } from "@/schemas/AddCardSchema";
 export type AddCardFormValues = z.infer<typeof addCardSchema>
 
 export type CardUpdates = {
-  title: string
-  priority: 'low' | 'medium' | 'high'
-  column: string
-  board: string
-  id: string
+  title?: string
+  priority?: 'low' | 'medium' | 'high'
+  column?: string
+  board?: string
+  id?: string
 }
 
 const useManageCards = (initialValues?: { title: string; priority: 'low' | 'medium' | 'high' }) => {
@@ -44,7 +44,7 @@ const useManageCards = (initialValues?: { title: string; priority: 'low' | 'medi
     });
   }
 
-  const onSubmitDeleteCard = async (cardToDelete: AddCardFormValues) => {
+  const onSubmitDeleteCard = async (cardToDelete: CardUpdates) => {
     const { id, board, column } = cardToDelete
     return axios.delete(`${apiUrl}/api/card/${column}/${board}/${id}`, {
       withCredentials: true
