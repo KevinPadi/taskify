@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 const logoutRequest = async () => {
-  const response = await axios.post('http://localhost:3000/api/logout')
+  const apiUrl = import.meta.env.VITE_BACKEND_URL
+
+  const response = await axios.post(`${apiUrl}/api/logout`)
   return response
 
 }

@@ -6,6 +6,8 @@ import axios from 'axios'
 
 
 const useLogin = () => {
+  const apiUrl = import.meta.env.VITE_BACKEND_URL
+
   const userLoginSchema = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -16,7 +18,7 @@ const useLogin = () => {
   })
 
   const onSubmitLogin = async (values: z.infer<typeof loginFormSchema>) => {
-    return axios.post('http://localhost:3000/api/login', values, {
+    return axios.post(`${apiUrl}/api/login`, values, {
       withCredentials: true,
     });
   }

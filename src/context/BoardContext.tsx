@@ -39,6 +39,7 @@ export const BoardProvider: React.FC<BoardProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const { onSubmitCreateBoard, onSubmitEditBoard } = useManageBoard()
+  const apiUrl = import.meta.env.VITE_BACKEND_URL
 
 // create new board
 const createBoard = async ({ values }: ValuesProps): Promise<void> => {
@@ -86,7 +87,7 @@ const createBoard = async ({ values }: ValuesProps): Promise<void> => {
   const fetchBoards = async (): Promise<void> => {
     try {
       setLoading(true)
-      const { data } = await axios.get<Board[]>("http://localhost:3000/api/board", {
+      const { data } = await axios.get<Board[]>(`${apiUrl}/api/board`, {
         withCredentials: true
       })
       setBoards(data)
@@ -161,7 +162,7 @@ const createBoard = async ({ values }: ValuesProps): Promise<void> => {
   const deleteBoard = async (id: string): Promise<void> => {
     try {
       setLoading(true)
-      const { data } = await axios.delete<Board[]>(`http://localhost:3000/api/board/${id}`, {
+      const { data } = await axios.delete<Board[]>(`${apiUrl}/api/board/${id}`, {
         withCredentials: true
       })
       console.log(data)

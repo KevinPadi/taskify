@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 
 
 const useManageBoard = (initialValues?: { name: string; background: string }) => {
+  const apiUrl = import.meta.env.VITE_BACKEND_URL
+
   const createBoardFormSchema = useForm<z.infer<typeof createBoardSchema>>({
     resolver: zodResolver(createBoardSchema),
     defaultValues: {
@@ -15,13 +17,13 @@ const useManageBoard = (initialValues?: { name: string; background: string }) =>
   })
 
   const onSubmitCreateBoard = async (values: z.infer<typeof createBoardSchema>) => {
-    return axios.post('http://localhost:3000/api/board', values, {
+    return axios.post(`${apiUrl}/api/board`, values, {
       withCredentials: true,
     });
   }
 
   const onSubmitEditBoard = async (values: z.infer<typeof createBoardSchema>) => {
-    return axios.patch(`http://localhost:3000/api/board/${values._id}`, values, {
+    return axios.patch(`${apiUrl}/api/board/${values._id}`, values, {
       withCredentials: true,
     });
   }
