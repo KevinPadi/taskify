@@ -17,13 +17,13 @@ const useManageBoard = (initialValues?: { name: string; background: string }) =>
   })
 
   const onSubmitCreateBoard = async (values: z.infer<typeof createBoardSchema>) => {
-    return axios.post(`${apiUrl}/api/board`, values, {
+    return axios.post(`${apiUrl}api/board`, values, {
       withCredentials: true,
     });
   }
 
   const onSubmitEditBoard = async (values: z.infer<typeof createBoardSchema>) => {
-    return axios.patch(`${apiUrl}/api/board/${values._id}`, values, {
+    return axios.patch(`${apiUrl}api/board/${values._id}`, values, {
       withCredentials: true,
     });
   }

@@ -110,7 +110,7 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
 
   const fetchColumns = async (boardId: string) => {
     try {
-      const { data } = await axios.get(`${apiUrl}/api/list/${boardId}`, { withCredentials: true });
+      const { data } = await axios.get(`${apiUrl}api/list/${boardId}`, { withCredentials: true });
       setColumnData(data)
     } catch (error) {
       console.error(error);

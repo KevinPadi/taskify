@@ -28,12 +28,12 @@ const useManageCards = (initialValues?: { title: string; priority: 'low' | 'medi
   })
 
   const onSubmitGetCards = async (boardId: string) => {
-    return axios.get(`${apiUrl}/api/card/${boardId}`, { withCredentials: true });
+    return axios.get(`${apiUrl}api/card/${boardId}`, { withCredentials: true });
 
   }
 
   const onSubmitCreateCard = async (values: AddCardFormValues, columnId: string, boardId: string) => {
-    return await axios.post(`${apiUrl}/api/card/${columnId}/${boardId}`, values, {
+    return await axios.post(`${apiUrl}api/card/${columnId}/${boardId}`, values, {
       withCredentials: true,
     });
   };
@@ -41,14 +41,14 @@ const useManageCards = (initialValues?: { title: string; priority: 'low' | 'medi
 
   const onSubmitEditCard = async (cardToMove: EditCardSchema, updates: CardUpdates ) => {
     const { id, board, column } = cardToMove
-    return axios.patch(`${apiUrl}/api/card/${column}/${board}/${id}`, updates, {
+    return axios.patch(`${apiUrl}api/card/${column}/${board}/${id}`, updates, {
       withCredentials: true,
     });
   }
 
   const onSubmitDeleteCard = async (cardToDelete: CardUpdates) => {
     const { id, board, column } = cardToDelete
-    return axios.delete(`${apiUrl}/api/card/${column}/${board}/${id}`, {
+    return axios.delete(`${apiUrl}api/card/${column}/${board}/${id}`, {
       withCredentials: true
     })
   }

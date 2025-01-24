@@ -87,7 +87,7 @@ const createBoard = async ({ values }: ValuesProps): Promise<void> => {
   const fetchBoards = async (): Promise<void> => {
     try {
       setLoading(true)
-      const { data } = await axios.get<Board[]>(`${apiUrl}/api/board`, {
+      const { data } = await axios.get<Board[]>(`${apiUrl}api/board`, {
         withCredentials: true
       })
       setBoards(data)
@@ -162,7 +162,7 @@ const createBoard = async ({ values }: ValuesProps): Promise<void> => {
   const deleteBoard = async (id: string): Promise<void> => {
     try {
       setLoading(true)
-      const { data } = await axios.delete<Board[]>(`${apiUrl}/api/board/${id}`, {
+      const { data } = await axios.delete<Board[]>(`${apiUrl}api/board/${id}`, {
         withCredentials: true
       })
       console.log(data)
