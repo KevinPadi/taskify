@@ -118,54 +118,34 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
   }
 
   const editCard = async (cardToMove: EditCardSchema, updates: CardUpdates) => {
-    console.log(cardToMove)
-    const loadingToastId = toast.loading("Updating card...");
+    console.log(cardToMove);
     try {
-      // Actualiza el estado local de la card sin hacer la ordenación aún
       setCardsData((prevCards) => {
         return prevCards.map((card) =>
           card._id === cardToMove.id ? { ...card, ...updates } : card
         );
       });
   
-      // Llama al backend para confirmar los cambios
       const res = await onSubmitEditCard(cardToMove, updates);
       if (res.statusText === "OK") {
-        // Después de que el backend confirme, reorganizamos las cards
         setCardsData((prevCards) => {
           const updatedCards = prevCards.map((card) =>
             card._id === cardToMove.id ? { ...card, ...updates } : card
           );
-          
-          // Ordena las cards con base en su lógica de prioridad o cualquier otro campo
+  
           const priorityMap = {
             low: 1,
             medium: 2,
             high: 3,
           };
-          
-          return updatedCards.sort((a, b) => priorityMap[a.priority] - priorityMap[b.priority])
-        });
   
-        toast.update(loadingToastId, {
-          render: "Card updated successfully!",
-          type: "success",
-          isLoading: false,
-          autoClose: 2500,
-          closeOnClick: true,
+          return updatedCards.sort((a, b) => priorityMap[a.priority] - priorityMap[b.priority]);
         });
       }
     } catch (error) {
-      toast.update(loadingToastId, {
-        render: "An error occurred",
-        type: "error",
-        isLoading: false,
-        autoClose: 2500,
-        closeOnClick: true,
-      });
       console.error("Failed to update card:", error);
     }
-  };  
+  }    
 
   const deleteCard = async (cardToDelete: CardUpdates) => {
     const loadingToastId = toast.loading("Deleting card...");
