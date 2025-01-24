@@ -18,7 +18,7 @@ const useLogin = () => {
   })
 
   const onSubmitLogin = async (values: z.infer<typeof loginFormSchema>) => {
-    return axios.post(`${apiUrl}/api/login`, values, {
+    return axios.post(`${apiUrl}api/login`, values, {
       withCredentials: true,
     });
   }
