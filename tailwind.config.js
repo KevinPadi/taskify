@@ -20,7 +20,10 @@ module.exports = {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			}
-  		}
+  		},
+			fontFamily: {
+        roboto: ['Inter', 'sans-serif'],
+      },
   	}
   },
   plugins: [require("tailwindcss-animate")],

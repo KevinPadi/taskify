@@ -19,8 +19,7 @@ html.light {
 @layer base {
   :root {
 
-    --radius: 0.5rem
-  ;
+    --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -36,7 +35,9 @@ html.light {
 
     --sidebar-border: 220 13% 91%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%
+  }
+
   .dark {
 
     --sidebar-background: 240 5.9% 10%;
@@ -55,6 +56,12 @@ html.light {
 
     --sidebar-ring: 217.2 91.2% 59.8%
   }
+
+
+  body {
+    @apply font-roboto;
+  }
+
 }
 
 .edge-top {
