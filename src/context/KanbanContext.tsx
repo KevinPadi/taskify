@@ -118,7 +118,6 @@ export const KanbanProvider: React.FC<KanbanProviderProps> = ({ children }) => {
   }
 
   const editCard = async (cardToMove: EditCardSchema, updates: CardUpdates) => {
-    console.log(cardToMove);
     try {
       setCardsData((prevCards) => {
         return prevCards.map((card) =>

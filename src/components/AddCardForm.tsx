@@ -31,7 +31,6 @@ function AddCardForm({ className, columnId }: AddCardFormTypeProps) {
 
   const onSubmit = (values: z.infer<typeof addCardSchema>) => {
     if(boardId) createCard(values, columnId, boardId)
-    console.log(values)
   };
 
   return (

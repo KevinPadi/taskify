@@ -7,7 +7,6 @@ import type { BaseEventPayload, ElementDragType } from "@atlaskit/pragmatic-drag
 
 const KanbanBoard: React.FC = () => {
   const { cardsData, columnData, editCard } = useKanban()
-  console.log(cardsData)
   const [columnsData, setColumnsData] = useState<Record<string, { columnId: string; title: string; order: number; cards: { id: string; content: string; priority: 'low' | 'medium' | 'high' }[] }>>({})
 
   useEffect(() => {

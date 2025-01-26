@@ -7,7 +7,6 @@ const BoardsPage = () => {
   const { fetchBoards } = useBoard()
   useEffect(() => {
     fetchBoards()
-   console.log('hizo fetch de boards')
   }, [])
 
   return (
