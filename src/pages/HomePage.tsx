@@ -31,7 +31,7 @@ const HomePage = () => {
             </h1>
             <DrawerDialogDemo />
           </div>
-          <img src="/src/assets/taskify-kanban-board-screenshot.webp" className="rounded-xl shadow-lg aspect-video" alt="" />
+          <img src="/taskify-kanban-board-screenshot.webp" className="rounded-xl shadow-lg aspect-video" alt="" />
         </div>
       </div>
       <footer className="w-full absolute bottom-0 left-0 bg-neutral-200 dark:bg-neutral-950">
