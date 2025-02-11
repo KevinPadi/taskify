@@ -6,6 +6,7 @@ import { createAccessToken } from '../utils.js'
 import { config as configDotenv } from "dotenv"
 import List from '../models/list_model.js'
 import Card from '../models/card_model.js'
+import { promisify } from 'util'
 
 configDotenv()
 const TOKEN_SECRET = process.env.TOKEN_SECRET
@@ -31,7 +32,7 @@ export const registerUser = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie('token', token, {
-      httpOnly: false,
+      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
     });
@@ -60,7 +61,7 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound._id })
     res.cookie('token', token, {
-      httpOnly: false,
+      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     })
@@ -75,14 +76,15 @@ export const login = async (req, res) => {
   }
 }
 
-export const verifyToken = async (req, res) => {
-  const { token } = req.cookies
-  if (!token) return res.status(401).json({ message: 'No token provided' })
+const verifyToken = async (req, res) => {
+  try {
+    const { token } = req.cookies
+    if (!token) return res.status(401).json({ message: 'No token provided' })
 
-  jwt.verify(token, TOKEN_SECRET, async (error, user) => {
-    if (error) return res.status(401).json({ message: 'Unauthorized' })
+    // Convertimos jwt.verify en una promesa para poder usar await
+    const decoded = await promisify(jwt.verify)(token, TOKEN_SECRET)
 
-    const userFound = await User.findById(user.id)
+    const userFound = await User.findById(decoded.id)
     if (!userFound) return res.status(404).json({ message: 'User not found' })
 
     return res.status(200).json({
@@ -90,8 +92,13 @@ export const verifyToken = async (req, res) => {
       userName: userFound.userName,
       email: userFound.email
     })
-  })
+  } catch (error) {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
 }
+
+export default verifyToken
+
 
 export const logout = async (req, res) => {
   res.cookie('token', '', {

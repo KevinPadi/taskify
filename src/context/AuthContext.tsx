@@ -1,4 +1,3 @@
-// import useLogin from '@/hooks/useLogin'
 import useRegister from '@/hooks/useRegister'
 import { useEffect, createContext, useState, ReactNode } from 'react'
 import { LoginData, RegisterData } from '@/types'
@@ -14,7 +13,6 @@ interface User {
   id: string;
   userName: string;
   email: string;
-  
 }
 
 interface AuthProviderProps { 
@@ -36,7 +34,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const { onSubmitRegister } = useRegister()
   const { onSubmitLogin } = useLogin()
@@ -50,7 +48,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return () => clearTimeout(timer)
     }
   }, [errors])
-
 
   const register = async (data: RegisterData) => {
     const loadingToastId = toast.loading("Creating account...");
@@ -223,6 +220,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         console.error(error)
         setIsAuthenticated(false);
         localStorage.removeItem("token");
+      } finally {
+        setLoading(false);
       }
     }
     checkLogin()
@@ -237,7 +236,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         deleteAccount,
         isAuthenticated,
         logout,
-        // errors,
         loading
       }}
     >
