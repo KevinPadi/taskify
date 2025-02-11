@@ -76,7 +76,7 @@ export const login = async (req, res) => {
   }
 }
 
-const verifyToken = async (req, res) => {
+export const verifyToken = async (req, res) => {
   try {
     const { token } = req.cookies
     if (!token) return res.status(401).json({ message: 'No token provided' })
@@ -96,9 +96,6 @@ const verifyToken = async (req, res) => {
     return res.status(401).json({ message: 'Unauthorized' })
   }
 }
-
-export default verifyToken
-
 
 export const logout = async (req, res) => {
   res.cookie('token', '', {
